@@ -1,0 +1,498 @@
+/* ======================================================
+   CODEHELPER — COMPOSER / ANEXOS DO CHAT
+   Ajuste da barra de mensagem
+====================================================== */
+
+
+/* ======================================================
+   FORMULÁRIO
+====================================================== */
+
+#painel-chat .chat-form {
+  display: flex;
+  align-items: flex-end;
+  gap: 10px;
+  width: 100%;
+}
+
+
+/* ======================================================
+   CAIXA PRINCIPAL
+====================================================== */
+
+#painel-chat .chat-input-container {
+  flex: 1;
+  min-width: 0;
+
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  min-height: 58px;
+
+  padding: 9px 10px;
+
+  border: 1px solid var(--cor-borda-forte) !important;
+  border-radius: 18px !important;
+
+  outline: none !important;
+
+  background: var(--cor-fundo-alt) !important;
+
+  box-shadow:
+    0 8px 25px
+    rgba(0, 0, 0, 0.10) !important;
+
+  transition:
+    border-color 0.16s,
+    box-shadow 0.16s,
+    background 0.16s;
+}
+
+
+#painel-chat .chat-input-container::before,
+#painel-chat .chat-input-container::after {
+  display: none !important;
+  content: none !important;
+}
+
+
+#painel-chat .chat-input-container:focus-within {
+  border-color:
+    color-mix(
+      in srgb,
+      var(--cor-destaque) 65%,
+      var(--cor-borda)
+    ) !important;
+
+  background:
+    var(--cor-fundo-alt) !important;
+
+  box-shadow:
+    0 0 0 2px
+    color-mix(
+      in srgb,
+      var(--cor-destaque) 9%,
+      transparent
+    ),
+    0 9px 28px
+    rgba(0, 0, 0, 0.11)
+    !important;
+}
+
+
+/* ======================================================
+   BOTÃO +
+====================================================== */
+
+#painel-chat .chat-anexo-btn {
+  width: 38px;
+  height: 38px;
+
+  flex: 0 0 38px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0;
+
+  border: none;
+  border-radius: 50%;
+
+  background: var(--cor-fundo-alt2);
+
+  color: var(--cor-texto-dim);
+
+  cursor: pointer;
+
+  transition:
+    color 0.14s,
+    background 0.14s,
+    transform 0.14s;
+}
+
+
+#painel-chat .chat-anexo-btn svg {
+  width: 19px;
+  height: 19px;
+
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.9;
+  stroke-linecap: round;
+}
+
+
+#painel-chat .chat-anexo-btn:hover {
+  background:
+    color-mix(
+      in srgb,
+      var(--cor-destaque) 9%,
+      var(--cor-fundo-alt2)
+    );
+
+  color: var(--cor-texto);
+}
+
+
+#painel-chat .chat-anexo-btn:active {
+  transform: scale(0.94);
+}
+
+
+/* ======================================================
+   ÁREA CENTRAL
+====================================================== */
+
+#painel-chat .chat-compose-centro {
+  flex: 1 1 auto;
+  min-width: 0;
+  width: 100%;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+
+/* ======================================================
+   TEXTAREA
+====================================================== */
+
+#painel-chat .chat-form textarea,
+#painel-chat #chat-input {
+  display: block;
+
+  width: 100% !important;
+  min-width: 0;
+
+  min-height: 28px;
+  max-height: 180px;
+
+  margin: 0 !important;
+  padding: 4px 2px !important;
+
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  border: none !important;
+  outline: none !important;
+  border-radius: 0 !important;
+
+  background: transparent !important;
+
+  box-shadow: none !important;
+
+  color: var(--cor-texto);
+
+  font-family: inherit;
+  font-size: 14px;
+  line-height: 1.5;
+
+  resize: none;
+
+  appearance: none;
+  -webkit-appearance: none;
+
+  scrollbar-width: none;
+}
+
+
+#painel-chat .chat-form textarea::-webkit-scrollbar,
+#painel-chat #chat-input::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  display: none;
+}
+
+
+#painel-chat .chat-form textarea:focus,
+#painel-chat #chat-input:focus {
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+
+#painel-chat .chat-form textarea::placeholder,
+#painel-chat #chat-input::placeholder {
+  color: var(--cor-texto-dim);
+  opacity: 0.78;
+}
+
+
+#painel-chat .chat-input-info {
+  display: none !important;
+}
+
+
+/* ======================================================
+   PREVIEW DOS ANEXOS
+====================================================== */
+
+#painel-chat .chat-anexos-preview {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 7px;
+
+  width: 100%;
+  margin-top: 7px;
+}
+
+
+#painel-chat .chat-anexos-preview:empty {
+  display: none;
+}
+
+
+#painel-chat .chat-anexo-chip {
+  position: relative;
+
+  max-width: 240px;
+  min-height: 38px;
+
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  padding: 5px 7px;
+
+  border: 1px solid var(--cor-borda);
+  border-radius: 9px;
+
+  background: var(--cor-fundo-alt2);
+
+  color: var(--cor-texto);
+}
+
+
+#painel-chat .chat-anexo-miniatura {
+  width: 30px;
+  height: 30px;
+
+  flex-shrink: 0;
+
+  border-radius: 6px;
+
+  object-fit: cover;
+
+  background: var(--cor-fundo);
+}
+
+
+#painel-chat .chat-anexo-tipo {
+  width: 30px;
+  height: 30px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 6px;
+
+  background:
+    color-mix(
+      in srgb,
+      var(--cor-destaque) 8%,
+      var(--cor-fundo-alt)
+    );
+
+  color: var(--cor-destaque);
+}
+
+
+#painel-chat .chat-anexo-tipo svg {
+  width: 16px;
+  height: 16px;
+
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+
+#painel-chat .chat-anexo-nome {
+  min-width: 0;
+
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+
+  color: var(--cor-texto);
+
+  font-size: 11.5px;
+}
+
+
+#painel-chat .chat-anexo-remover {
+  width: 22px;
+  height: 22px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0;
+
+  border: none;
+  border-radius: 50%;
+
+  background: transparent;
+
+  color: var(--cor-texto-dim);
+
+  cursor: pointer;
+
+  font-family: inherit;
+  font-size: 15px;
+  line-height: 1;
+}
+
+
+#painel-chat .chat-anexo-remover:hover {
+  background:
+    color-mix(
+      in srgb,
+      var(--cor-perigo) 10%,
+      transparent
+    );
+
+  color: var(--cor-perigo);
+}
+
+
+/* ======================================================
+   BOTÃO ENVIAR
+====================================================== */
+
+#painel-chat .chat-form > #btn-enviar,
+#painel-chat .chat-enviar-btn {
+  width: 48px !important;
+  height: 48px !important;
+
+  flex: 0 0 48px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0 !important;
+
+  border: none !important;
+  border-radius: 50% !important;
+
+  background: var(--cor-destaque) !important;
+
+  color: #fff !important;
+
+  box-shadow:
+    0 8px 22px
+    color-mix(
+      in srgb,
+      var(--cor-destaque) 23%,
+      transparent
+    ) !important;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.14s,
+    filter 0.14s,
+    box-shadow 0.14s,
+    opacity 0.14s;
+}
+
+
+#painel-chat .chat-form > #btn-enviar svg,
+#painel-chat .chat-enviar-btn svg {
+  width: 19px;
+  height: 19px;
+
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+
+#painel-chat .chat-form > #btn-enviar:hover:not(:disabled),
+#painel-chat .chat-enviar-btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+  filter: brightness(1.07);
+}
+
+
+#painel-chat .chat-form > #btn-enviar:active:not(:disabled),
+#painel-chat .chat-enviar-btn:active:not(:disabled) {
+  transform: scale(0.95);
+}
+
+
+#painel-chat .chat-form > #btn-enviar:disabled,
+#painel-chat .chat-enviar-btn:disabled {
+  opacity: 0.38;
+  cursor: not-allowed;
+  box-shadow: none !important;
+}
+
+
+/* ======================================================
+   TEMA CLARO
+====================================================== */
+
+body.tema-claro
+#painel-chat .chat-input-container {
+  box-shadow:
+    0 7px 22px
+    rgba(35, 40, 60, 0.06)
+    !important;
+}
+
+
+/* ======================================================
+   MOBILE
+====================================================== */
+
+@media (max-width: 600px) {
+
+  #painel-chat .chat-form {
+    gap: 8px;
+  }
+
+
+  #painel-chat .chat-input-container {
+    min-height: 54px;
+    padding: 7px 8px;
+    border-radius: 16px !important;
+  }
+
+
+  #painel-chat .chat-anexo-btn {
+    width: 36px;
+    height: 36px;
+    flex-basis: 36px;
+  }
+
+
+  #painel-chat .chat-form > #btn-enviar,
+  #painel-chat .chat-enviar-btn {
+    width: 45px !important;
+    height: 45px !important;
+    flex-basis: 45px;
+  }
+
+
+  #painel-chat .chat-anexo-chip {
+    max-width: 190px;
+  }
+
+}

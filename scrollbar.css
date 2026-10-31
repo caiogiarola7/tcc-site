@@ -1,0 +1,77 @@
+/* ======================================================
+   BARRAS DE ROLAGEM
+====================================================== */
+
+
+/* SIDEBAR
+   Continua rolando normalmente,
+   mas a barra fica invisível.
+*/
+
+.sidebar-principal {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.sidebar-principal::-webkit-scrollbar {
+  display: none;
+}
+
+
+/* ======================================================
+   OUTRAS ÁREAS DO SITE
+   Barra fina e discreta
+====================================================== */
+
+.chat-mensagens,
+.analisador-resultado,
+.playground-saida,
+pre,
+textarea {
+  scrollbar-width: thin;
+
+  scrollbar-color:
+    rgba(150, 150, 150, 0.35)
+    transparent;
+}
+
+
+.chat-mensagens::-webkit-scrollbar,
+.analisador-resultado::-webkit-scrollbar,
+.playground-saida::-webkit-scrollbar,
+pre::-webkit-scrollbar,
+textarea::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+
+
+.chat-mensagens::-webkit-scrollbar-track,
+.analisador-resultado::-webkit-scrollbar-track,
+.playground-saida::-webkit-scrollbar-track,
+pre::-webkit-scrollbar-track,
+textarea::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+
+.chat-mensagens::-webkit-scrollbar-thumb,
+.analisador-resultado::-webkit-scrollbar-thumb,
+.playground-saida::-webkit-scrollbar-thumb,
+pre::-webkit-scrollbar-thumb,
+textarea::-webkit-scrollbar-thumb {
+  background:
+    rgba(150, 150, 150, 0.28);
+
+  border-radius: 999px;
+}
+
+
+.chat-mensagens::-webkit-scrollbar-thumb:hover,
+.analisador-resultado::-webkit-scrollbar-thumb:hover,
+.playground-saida::-webkit-scrollbar-thumb:hover,
+pre::-webkit-scrollbar-thumb:hover,
+textarea::-webkit-scrollbar-thumb:hover {
+  background:
+    rgba(150, 150, 150, 0.5);
+}

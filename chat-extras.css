@@ -1,0 +1,733 @@
+/* ======================================================
+   CODEHELPER — CONVERSAS / TOPBAR
+====================================================== */
+
+
+/* ======================================================
+   ESCONDER LABEL ANTIGA
+====================================================== */
+
+.secao-conversas
+> .sidebar-secao-label {
+  display: none;
+}
+
+
+/* ======================================================
+   LISTA
+====================================================== */
+
+.lista-conversas {
+  display: block !important;
+
+  padding-top: 3px;
+}
+
+
+/* ======================================================
+   GRUPOS
+====================================================== */
+
+.conversa-grupo {
+  width: 100%;
+
+  margin-bottom: 15px;
+}
+
+
+.conversa-grupo-titulo {
+  width: 100%;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  min-height: 27px;
+
+  padding:
+    0 8px;
+
+  margin-bottom: 3px;
+
+  border: none;
+
+  background: transparent;
+
+  color:
+    #7d7d8b;
+
+  font-family:
+    inherit;
+
+  font-size: 10px;
+
+  font-weight: 600;
+
+  letter-spacing:
+    0.04em;
+
+  text-align: left;
+}
+
+
+button.conversa-grupo-titulo {
+  cursor: pointer;
+}
+
+
+button.conversa-grupo-titulo:hover {
+  color:
+    var(--cor-texto);
+}
+
+
+.conversa-grupo-titulo svg {
+  width: 13px;
+
+  height: 13px;
+
+  fill: none;
+
+  stroke:
+    currentColor;
+
+  stroke-width: 2;
+
+  stroke-linecap:
+    round;
+
+  transition:
+    transform 0.15s;
+}
+
+
+.conversa-grupo.recolhido
+.conversa-grupo-titulo svg {
+  transform:
+    rotate(-90deg);
+}
+
+
+.conversa-grupo.recolhido
+.conversa-grupo-lista {
+  display: none;
+}
+
+
+.conversa-grupo-lista {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 2px;
+}
+
+
+/* ======================================================
+   ITEM
+====================================================== */
+
+.conversa-grupo
+.item-conversa {
+  position: relative;
+
+  width: 100%;
+
+  min-height: 37px;
+
+  padding-right:
+    64px !important;
+}
+
+
+.conversa-grupo
+.btn-excluir-conversa {
+  display: none !important;
+}
+
+
+/* ======================================================
+   PIN + TRÊS PONTOS
+====================================================== */
+
+.conversa-acoes-hover {
+  position: absolute;
+
+  top: 50%;
+
+  right: 5px;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 1px;
+
+  opacity: 0;
+
+  pointer-events: none;
+
+  transform:
+    translateY(-50%);
+
+  transition:
+    opacity 0.12s;
+}
+
+
+.item-conversa:hover
+.conversa-acoes-hover {
+  opacity: 1;
+
+  pointer-events: auto;
+}
+
+
+.item-conversa.conversa-fixada
+.btn-fixar-conversa {
+  color:
+    var(--cor-destaque);
+}
+
+
+.item-conversa.conversa-fixada
+.conversa-acoes-hover {
+  opacity: 1;
+
+  pointer-events: auto;
+}
+
+
+.item-conversa.conversa-fixada:not(:hover)
+.btn-mais-conversa {
+  opacity: 0;
+
+  pointer-events: none;
+}
+
+
+.btn-fixar-conversa,
+.btn-mais-conversa {
+  width: 27px;
+
+  height: 27px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  padding: 0;
+
+  border: none;
+
+  border-radius: 6px;
+
+  background:
+    transparent;
+
+  color:
+    #777785;
+
+  cursor: pointer;
+}
+
+
+.btn-fixar-conversa:hover,
+.btn-mais-conversa:hover {
+  background:
+    var(--cor-fundo-alt2);
+
+  color:
+    var(--cor-texto);
+}
+
+
+.btn-fixar-conversa svg,
+.btn-mais-conversa svg {
+  width: 14px;
+
+  height: 14px;
+
+  fill: none;
+
+  stroke:
+    currentColor;
+
+  stroke-width: 1.8;
+
+  stroke-linecap:
+    round;
+
+  stroke-linejoin:
+    round;
+}
+
+
+/* ======================================================
+   MENU SIDEBAR
+====================================================== */
+
+.conversa-menu-popup {
+  position: fixed;
+
+  z-index: 100000;
+
+  width: 190px;
+
+  padding: 7px;
+
+  border:
+    1px solid
+    rgba(255, 255, 255, 0.08);
+
+  border-radius: 11px;
+
+  background:
+    #222228;
+
+  box-shadow:
+    0 18px 50px
+    rgba(0, 0, 0, 0.4);
+}
+
+
+.conversa-menu-item {
+  width: 100%;
+
+  min-height: 38px;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 10px;
+
+  padding:
+    0 10px;
+
+  border: none;
+
+  border-radius: 7px;
+
+  background:
+    transparent;
+
+  color:
+    #dddde5;
+
+  cursor: pointer;
+
+  font-family: inherit;
+
+  font-size: 12px;
+
+  text-align: left;
+}
+
+
+.conversa-menu-item:hover {
+  background:
+    rgba(255, 255, 255, 0.06);
+
+  color: #fff;
+}
+
+
+.conversa-menu-item svg {
+  width: 16px;
+
+  height: 16px;
+
+  fill: none;
+
+  stroke:
+    currentColor;
+
+  stroke-width: 1.7;
+
+  stroke-linecap:
+    round;
+
+  stroke-linejoin:
+    round;
+}
+
+
+.conversa-menu-item.perigo {
+  color:
+    #ff7373;
+}
+
+
+.conversa-menu-item.perigo:hover {
+  background:
+    rgba(255, 90, 90, 0.08);
+}
+
+
+.conversa-menu-separador {
+  height: 1px;
+
+  margin:
+    5px 3px;
+
+  background:
+    rgba(255, 255, 255, 0.07);
+}
+
+
+/* ======================================================
+   TOPBAR DO CHAT
+
+   Agora fica no canto superior direito da TELA,
+   bem perto da scrollbar.
+====================================================== */
+
+.chat-topbar {
+  position: fixed;
+
+  top: 10px;
+
+  right: 18px;
+
+  z-index: 1000;
+
+  width: auto;
+
+  min-height: 38px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: flex-end;
+
+  gap: 4px;
+
+  padding: 2px;
+
+  margin: 0;
+
+  background:
+    transparent;
+}
+
+
+.chat-topbar[hidden] {
+  display: none !important;
+}
+
+
+/* ======================================================
+   COMPARTILHAR
+====================================================== */
+
+.chat-topbar-compartilhar,
+.chat-topbar-mais {
+  min-height: 34px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 8px;
+
+  padding:
+    0 9px;
+
+  border: none;
+
+  border-radius: 8px;
+
+  background:
+    transparent;
+
+  color:
+    var(--cor-texto);
+
+  cursor: pointer;
+
+  font-family: inherit;
+
+  font-size: 12px;
+
+  font-weight: 600;
+
+  transition:
+    background 0.13s;
+}
+
+
+.chat-topbar-compartilhar:hover,
+.chat-topbar-mais:hover {
+  background:
+    var(--cor-fundo-alt);
+}
+
+
+.chat-topbar-compartilhar svg {
+  width: 17px;
+
+  height: 17px;
+
+  fill: none;
+
+  stroke:
+    currentColor;
+
+  stroke-width: 1.7;
+
+  stroke-linecap:
+    round;
+
+  stroke-linejoin:
+    round;
+}
+
+
+.chat-topbar-mais {
+  width: 34px;
+
+  padding: 0;
+}
+
+
+.chat-topbar-mais svg {
+  width: 18px;
+
+  height: 18px;
+
+  color:
+    var(--cor-texto);
+}
+
+
+/* ======================================================
+   ROOT DO MENU
+====================================================== */
+
+.chat-topbar-menu-root {
+  position: relative;
+}
+
+
+/* ======================================================
+   POPUP DO TOPO
+====================================================== */
+
+.chat-topbar-popup {
+  position: absolute;
+
+  top:
+    calc(100% + 7px);
+
+  right: 0;
+
+  width: 210px;
+
+  padding: 7px;
+
+  border:
+    1px solid
+    rgba(255, 255, 255, 0.08);
+
+  border-radius: 12px;
+
+  background:
+    #25252b;
+
+  box-shadow:
+    0 20px 55px
+    rgba(0, 0, 0, 0.43);
+}
+
+
+.chat-topbar-popup[hidden] {
+  display: none;
+}
+
+
+.chat-topbar-popup
+button {
+  width: 100%;
+
+  min-height: 40px;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 11px;
+
+  padding:
+    0 10px;
+
+  border: none;
+
+  border-radius: 8px;
+
+  background:
+    transparent;
+
+  color:
+    #e0e0e7;
+
+  cursor: pointer;
+
+  font-family: inherit;
+
+  font-size: 12px;
+
+  text-align: left;
+
+  transition:
+    background 0.13s;
+}
+
+
+.chat-topbar-popup
+button:hover {
+  background:
+    rgba(255, 255, 255, 0.06);
+}
+
+
+.chat-topbar-popup
+button.ativo {
+  color:
+    #7d91ff;
+}
+
+
+.chat-topbar-popup
+button.perigo {
+  color:
+    #ff7272;
+}
+
+
+.chat-topbar-popup
+button.perigo:hover {
+  background:
+    rgba(255, 86, 86, 0.08);
+}
+
+
+.chat-topbar-popup
+svg {
+  width: 17px;
+
+  height: 17px;
+
+  flex-shrink: 0;
+
+  fill: none;
+
+  stroke:
+    currentColor;
+
+  stroke-width: 1.7;
+
+  stroke-linecap:
+    round;
+
+  stroke-linejoin:
+    round;
+}
+
+
+.chat-topbar-separador {
+  height: 1px;
+
+  margin:
+    5px 3px;
+
+  background:
+    rgba(255, 255, 255, 0.07);
+}
+
+
+/* ======================================================
+   TEMA CLARO
+====================================================== */
+
+body.tema-claro
+.chat-topbar-popup,
+body.tema-claro
+.conversa-menu-popup {
+  border-color:
+    var(--cor-borda);
+
+  background:
+    #ffffff;
+
+  box-shadow:
+    0 18px 45px
+    rgba(30, 35, 55, 0.13);
+}
+
+
+body.tema-claro
+.chat-topbar-popup
+button,
+body.tema-claro
+.conversa-menu-item {
+  color:
+    #303038;
+}
+
+
+body.tema-claro
+.chat-topbar-popup
+button:hover,
+body.tema-claro
+.conversa-menu-item:hover {
+  background:
+    #f1f1f5;
+}
+
+
+body.tema-claro
+.chat-topbar-popup
+button.perigo,
+body.tema-claro
+.conversa-menu-item.perigo {
+  color:
+    #d84d4d;
+}
+
+
+/* ======================================================
+   MOBILE
+====================================================== */
+
+@media (
+  max-width: 600px
+) {
+
+  .chat-topbar {
+    top: 7px;
+
+    right: 8px;
+  }
+
+
+  .chat-topbar-compartilhar
+  span {
+    display: none;
+  }
+
+
+  .chat-topbar-compartilhar {
+    width: 34px;
+
+    padding: 0;
+  }
+
+}

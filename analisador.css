@@ -1,0 +1,487 @@
+/* ======================================================
+   ANALISADOR
+====================================================== */
+
+#painel-analisador {
+  max-width: 900px;
+}
+
+
+/* ======================================================
+   TOPO
+====================================================== */
+
+.analisador-topo {
+  margin-bottom: 20px;
+}
+
+
+.analisador-topo h2 {
+  margin: 0 0 6px;
+
+  font-size: 24px;
+}
+
+
+.analisador-topo p {
+  margin: 0;
+
+  color:
+    var(--cor-texto-dim);
+
+  font-size: 14px;
+
+  line-height: 1.5;
+
+  max-width: 650px;
+}
+
+
+/* ======================================================
+   CONFIGURAÇÃO
+====================================================== */
+
+.analisador-config {
+  display: flex;
+
+  align-items: center;
+
+  gap: 12px;
+
+  margin-bottom: 12px;
+}
+
+
+.analisador-config label {
+  color:
+    var(--cor-texto-dim);
+
+  font-size: 13px;
+}
+
+
+.analisador-config select {
+  min-width: 160px;
+
+  padding: 9px 12px;
+
+  border:
+    1px solid var(--cor-borda-forte);
+
+  border-radius: 8px;
+
+  outline: none;
+
+  background:
+    var(--cor-fundo-alt);
+
+  color:
+    var(--cor-texto);
+
+  font-size: 13px;
+
+  cursor: pointer;
+}
+
+
+.analisador-config select:focus {
+  border-color:
+    var(--cor-destaque);
+}
+
+
+/* ======================================================
+   EDITOR
+====================================================== */
+
+.analisador-editor {
+  border:
+    1px solid var(--cor-borda);
+
+  border-radius: 12px;
+
+  overflow: hidden;
+
+  background:
+    var(--cor-fundo-alt);
+}
+
+
+.analisador-editor-topo {
+  min-height: 40px;
+
+  padding: 0 14px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 15px;
+
+  border-bottom:
+    1px solid var(--cor-borda);
+
+  background:
+    var(--cor-fundo-alt2);
+
+  color:
+    var(--cor-texto-dim);
+
+  font-size: 12px;
+
+  font-family: monospace;
+}
+
+
+#analisador-codigo {
+  width: 100%;
+
+  min-height: 300px;
+
+  display: block;
+
+  padding: 18px;
+
+  border: none;
+
+  outline: none;
+
+  resize: vertical;
+
+  background:
+    var(--cor-fundo-alt);
+
+  color:
+    var(--cor-texto);
+
+  font-family:
+    ui-monospace,
+    SFMono-Regular,
+    Menlo,
+    Monaco,
+    Consolas,
+    monospace;
+
+  font-size: 14px;
+
+  line-height: 1.6;
+
+  tab-size: 2;
+}
+
+
+#analisador-codigo::placeholder {
+  color:
+    var(--cor-texto-dim);
+}
+
+
+/* ======================================================
+   AÇÕES
+====================================================== */
+
+.analisador-acoes {
+  display: flex;
+
+  align-items: center;
+
+  flex-wrap: wrap;
+
+  gap: 8px;
+
+  margin: 14px 0 20px;
+}
+
+
+.analisador-btn-secundario {
+  padding: 11px 18px;
+
+  border:
+    1px solid var(--cor-borda-forte);
+
+  border-radius: 8px;
+
+  background:
+    var(--cor-fundo-alt);
+
+  color:
+    var(--cor-texto-dim);
+
+  font-size: 13px;
+
+  cursor: pointer;
+}
+
+
+.analisador-btn-secundario:hover {
+  color:
+    var(--cor-texto);
+
+  border-color:
+    var(--cor-destaque);
+}
+
+
+#btn-analisar-codigo:disabled {
+  opacity: 0.5;
+
+  cursor: not-allowed;
+}
+
+
+/* ======================================================
+   RESULTADO
+====================================================== */
+
+.analisador-resultado-container {
+  border:
+    1px solid var(--cor-borda);
+
+  border-radius: 12px;
+
+  overflow: hidden;
+
+  background:
+    var(--cor-fundo-alt);
+}
+
+
+.analisador-resultado-topo {
+  min-height: 42px;
+
+  padding: 0 14px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 15px;
+
+  border-bottom:
+    1px solid var(--cor-borda);
+
+  background:
+    var(--cor-fundo-alt2);
+
+  font-size: 13px;
+
+  font-weight: 600;
+}
+
+
+.analisador-status {
+  color:
+    var(--cor-texto-dim);
+
+  font-size: 11px;
+
+  font-weight: 500;
+}
+
+
+.analisador-status.status-analisando {
+  color:
+    var(--cor-destaque);
+}
+
+
+.analisador-status.status-sucesso {
+  color:
+    var(--cor-positiva);
+}
+
+
+.analisador-status.status-erro {
+  color:
+    var(--cor-perigo);
+}
+
+
+.analisador-resultado {
+  min-height: 200px;
+
+  max-height: 600px;
+
+  overflow: auto;
+
+  padding: 18px;
+
+  font-size: 14px;
+
+  line-height: 1.6;
+}
+
+
+.analisador-placeholder {
+  margin: 0;
+
+  color:
+    var(--cor-texto-dim);
+}
+
+
+/* ======================================================
+   MARKDOWN
+====================================================== */
+
+.analisador-resultado h1,
+.analisador-resultado h2,
+.analisador-resultado h3 {
+  margin-top: 20px;
+
+  margin-bottom: 8px;
+}
+
+
+.analisador-resultado h2 {
+  font-size: 17px;
+}
+
+
+.analisador-resultado h3 {
+  font-size: 15px;
+}
+
+
+.analisador-resultado p {
+  margin: 8px 0;
+}
+
+
+.analisador-resultado ul,
+.analisador-resultado ol {
+  padding-left: 22px;
+}
+
+
+.analisador-resultado li {
+  margin: 5px 0;
+}
+
+
+.analisador-resultado pre {
+  overflow-x: auto;
+
+  margin: 12px 0;
+
+  padding: 14px;
+
+  border:
+    1px solid var(--cor-borda);
+
+  border-radius: 8px;
+
+  background:
+    var(--cor-fundo-alt2);
+
+  font-size: 13px;
+}
+
+
+.analisador-resultado code {
+  font-family:
+    ui-monospace,
+    SFMono-Regular,
+    Menlo,
+    Monaco,
+    Consolas,
+    monospace;
+}
+
+
+/* ======================================================
+   CARREGANDO
+====================================================== */
+
+.analisador-carregando {
+  display: flex;
+
+  align-items: center;
+
+  gap: 10px;
+
+  color:
+    var(--cor-texto-dim);
+}
+
+
+.analisador-carregando span {
+  width: 8px;
+
+  height: 8px;
+
+  border-radius: 50%;
+
+  background:
+    var(--gradiente);
+
+  animation:
+    analisador-pulsar 1s
+    ease-in-out infinite;
+}
+
+
+@keyframes analisador-pulsar {
+
+  0%,
+  100% {
+    transform:
+      scale(0.8);
+
+    opacity: 0.5;
+  }
+
+  50% {
+    transform:
+      scale(1.2);
+
+    opacity: 1;
+  }
+
+}
+
+
+.analisador-erro {
+  margin: 0;
+
+  color:
+    var(--cor-perigo);
+}
+
+
+/* ======================================================
+   MOBILE
+====================================================== */
+
+@media (max-width: 600px) {
+
+  .analisador-config {
+    align-items: stretch;
+
+    flex-direction: column;
+
+    gap: 6px;
+  }
+
+
+  .analisador-config select {
+    width: 100%;
+  }
+
+
+  #analisador-codigo {
+    min-height: 250px;
+
+    font-size: 13px;
+  }
+
+
+  .analisador-acoes button {
+    flex: 1;
+  }
+
+}

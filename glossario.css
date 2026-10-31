@@ -1,0 +1,254 @@
+
+.glossario-card {
+  overflow: hidden;
+}
+
+.glossario-categoria {
+  flex-shrink: 0;
+  padding: 5px 10px;
+  border-radius: 20px;
+  border: 1px solid var(--cor-borda-forte);
+  background: var(--cor-fundo-alt2);
+  color: var(--cor-texto-dim);
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.glossario-identificacao {
+  flex: 1;
+  min-width: 0;
+}
+
+.glossario-identificacao .nome {
+  font-weight: 700;
+}
+
+.glossario-identificacao .resumo {
+  margin-top: 5px;
+  line-height: 1.5;
+}
+
+.card.aberto {
+  border-color: var(--cor-borda-forte);
+}
+
+.card.aberto .nome {
+  color: var(--cor-destaque);
+}
+
+.card-corpo {
+  padding: 0 18px 18px;
+}
+
+.glossario-secao {
+  margin-top: 18px;
+}
+
+.glossario-secao-titulo {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin-bottom: 10px;
+}
+
+.glossario-secao-titulo h3 {
+  margin: 0;
+  color: var(--cor-texto);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.glossario-secao-icone {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 27px;
+  height: 27px;
+  flex-shrink: 0;
+  border-radius: 8px;
+  background: var(--cor-fundo-alt2);
+  font-size: 13px;
+}
+
+.glossario-secao > p {
+  margin: 0;
+  color: var(--cor-texto-dim);
+  font-size: 13px;
+  line-height: 1.8;
+}
+
+.glossario-codigo {
+  overflow: hidden;
+  border: 1px solid var(--cor-borda);
+  border-radius: 10px;
+  background: var(--cor-fundo-alt2);
+}
+
+.glossario-codigo-topo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 13px;
+  border-bottom: 1px solid var(--cor-borda);
+  color: var(--cor-texto-dim);
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.glossario-codigo-pontos {
+  display: flex;
+  gap: 5px;
+}
+
+.glossario-codigo-pontos i {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--cor-borda-forte);
+}
+
+.glossario-codigo pre {
+  margin: 0;
+  padding: 15px;
+  overflow-x: auto;
+  background: transparent;
+  font-size: 12px;
+  line-height: 1.7;
+}
+
+.glossario-codigo pre code {
+  font-family: Consolas, Monaco, monospace;
+}
+
+.glossario-relacionados {
+  padding-top: 16px;
+  border-top: 1px solid var(--cor-borda);
+}
+
+.relacionados {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.chip-relacionado {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 7px 11px;
+  border: 1px solid var(--cor-borda-forte);
+  border-radius: 7px;
+  background: var(--cor-fundo-alt2);
+  color: var(--cor-texto-dim);
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.chip-relacionado:hover {
+  border-color: var(--cor-destaque);
+  color: var(--cor-destaque);
+  transform: translateY(-1px);
+}
+
+.glossario-acoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px solid var(--cor-borda);
+}
+
+.glossario-btn {
+  padding: 8px 13px;
+  border-radius: 7px;
+  border: 1px solid var(--cor-borda-forte);
+  background: var(--cor-fundo-alt2);
+  color: var(--cor-texto-dim);
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  transition: 0.15s ease;
+}
+
+.glossario-btn:hover {
+  border-color: var(--cor-destaque);
+  color: var(--cor-texto);
+}
+
+.glossario-btn-ia {
+  background: var(--cor-destaque);
+  border-color: var(--cor-destaque);
+  color: #fff;
+}
+
+.glossario-btn-ia:hover {
+  color: #fff;
+  filter: brightness(1.08);
+}
+
+.glossario-btn-copiar.copiado {
+  border-color: var(--cor-positiva);
+  color: var(--cor-positiva);
+}
+
+.glossario-vazio {
+  padding: 45px 20px;
+  text-align: center;
+  color: var(--cor-texto-dim);
+}
+
+.glossario-vazio h3 {
+  margin: 0 0 8px;
+  color: var(--cor-texto);
+  font-size: 16px;
+}
+
+.glossario-vazio p {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+@media (max-width: 650px) {
+  .card-head {
+    flex-wrap: wrap;
+  }
+
+  .glossario-identificacao {
+    min-width: 70%;
+  }
+
+  .glossario-categoria {
+    margin-left: 36px;
+  }
+
+  .card-corpo {
+    padding: 0 13px 15px;
+  }
+
+  .glossario-acoes {
+    flex-direction: column;
+  }
+
+  .glossario-btn {
+    width: 100%;
+  }
+
+  .glossario-codigo pre {
+    font-size: 11px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .chip-relacionado,
+  .glossario-btn {
+    transition: none;
+  }
+}
