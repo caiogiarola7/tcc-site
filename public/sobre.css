@@ -1,0 +1,551 @@
+/* ======================================================
+   SOBRE O CODEHELPER
+====================================================== */
+
+.sobre-painel {
+  max-width: 1000px;
+}
+
+
+/* ======================================================
+   HERO
+====================================================== */
+
+.sobre-hero {
+  padding: 36px;
+
+  border:
+    1px solid var(--cor-borda);
+
+  border-radius: 16px;
+
+  background:
+    var(--cor-fundo-alt);
+
+  margin-bottom: 18px;
+}
+
+
+.sobre-tag {
+  display: inline-block;
+
+  margin-bottom: 12px;
+
+  padding: 5px 10px;
+
+  border:
+    1px solid var(--cor-borda-forte);
+
+  border-radius: 999px;
+
+  color:
+    var(--cor-destaque);
+
+  font-size: 10px;
+
+  font-weight: 700;
+
+  letter-spacing: 0.08em;
+
+  text-transform: uppercase;
+}
+
+
+.sobre-hero h1 {
+  margin: 0 0 12px;
+
+  font-size: 36px;
+
+  letter-spacing: -1px;
+}
+
+
+.sobre-hero p {
+  max-width: 680px;
+
+  margin: 0;
+
+  color:
+    var(--cor-texto-dim);
+
+  font-size: 15px;
+
+  line-height: 1.7;
+}
+
+
+/* ======================================================
+   CARDS
+====================================================== */
+
+.sobre-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+
+  gap: 12px;
+}
+
+
+.sobre-card {
+  position: relative;
+
+  min-height: 220px;
+
+  padding: 24px;
+
+  border:
+    1px solid var(--cor-borda);
+
+  border-radius: 14px;
+
+  background:
+    var(--cor-fundo-alt);
+}
+
+
+.sobre-card-numero {
+  display: block;
+
+  margin-bottom: 30px;
+
+  color:
+    var(--cor-destaque);
+
+  font-family: monospace;
+
+  font-size: 12px;
+
+  font-weight: 700;
+}
+
+
+.sobre-card h2 {
+  margin: 0 0 10px;
+
+  font-size: 18px;
+}
+
+
+.sobre-card p {
+  margin: 8px 0 0;
+
+  color:
+    var(--cor-texto-dim);
+
+  font-size: 13px;
+
+  line-height: 1.6;
+}
+
+
+/* ======================================================
+   SEÇÕES
+====================================================== */
+
+.sobre-secao {
+  margin-top: 36px;
+}
+
+
+.sobre-secao-titulo {
+  margin-bottom: 16px;
+}
+
+
+.sobre-secao-titulo > span {
+  display: block;
+
+  margin-bottom: 5px;
+
+  color:
+    var(--cor-destaque);
+
+  font-size: 10px;
+
+  font-weight: 700;
+
+  letter-spacing: 0.09em;
+}
+
+
+.sobre-secao-titulo h2 {
+  margin: 0;
+
+  font-size: 21px;
+}
+
+
+/* ======================================================
+   FUNCIONALIDADES
+====================================================== */
+
+.sobre-funcionalidades {
+  display: grid;
+
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+
+  gap: 10px;
+}
+
+
+.sobre-funcionalidade {
+  display: flex;
+
+  gap: 14px;
+
+  align-items: flex-start;
+
+  padding: 18px;
+
+  border:
+    1px solid var(--cor-borda);
+
+  border-radius: 12px;
+
+  background:
+    var(--cor-fundo-alt);
+}
+
+
+.sobre-icone {
+  width: 42px;
+
+  height: 42px;
+
+  flex-shrink: 0;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  border:
+    1px solid var(--cor-borda-forte);
+
+  border-radius: 9px;
+
+  background:
+    var(--cor-fundo-alt2);
+
+  color:
+    var(--cor-destaque);
+
+  font-family: monospace;
+
+  font-size: 12px;
+
+  font-weight: 700;
+}
+
+
+.sobre-funcionalidade strong {
+  display: block;
+
+  margin: 1px 0 5px;
+
+  font-size: 13px;
+}
+
+
+.sobre-funcionalidade p {
+  margin: 0;
+
+  color:
+    var(--cor-texto-dim);
+
+  font-size: 12px;
+
+  line-height: 1.5;
+}
+
+
+/* ======================================================
+   TECNOLOGIAS
+====================================================== */
+
+.sobre-tecnologias {
+  display: flex;
+
+  flex-wrap: wrap;
+
+  gap: 8px;
+}
+
+
+.sobre-tech {
+  padding: 9px 14px;
+
+  border:
+    1px solid var(--cor-borda-forte);
+
+  border-radius: 8px;
+
+  background:
+    var(--cor-fundo-alt);
+
+  color:
+    var(--cor-texto-dim);
+
+  font-family: monospace;
+
+  font-size: 12px;
+}
+
+
+.sobre-tech:hover {
+  border-color:
+    var(--cor-destaque);
+
+  color:
+    var(--cor-texto);
+}
+
+
+/* ======================================================
+   ARQUITETURA
+====================================================== */
+
+.sobre-arquitetura {
+  display: grid;
+
+  grid-template-columns:
+    1.2fr 1fr;
+
+  gap: 30px;
+
+  align-items: center;
+
+  margin-top: 36px;
+
+  padding: 28px;
+
+  border:
+    1px solid var(--cor-borda);
+
+  border-radius: 14px;
+
+  background:
+    var(--cor-fundo-alt);
+}
+
+
+.sobre-arquitetura-tag {
+  display: block;
+
+  margin-bottom: 7px;
+
+  color:
+    var(--cor-destaque);
+
+  font-size: 10px;
+
+  font-weight: 700;
+
+  letter-spacing: 0.08em;
+}
+
+
+.sobre-arquitetura h2 {
+  margin: 0 0 12px;
+
+  font-size: 21px;
+}
+
+
+.sobre-arquitetura p {
+  margin: 8px 0;
+
+  color:
+    var(--cor-texto-dim);
+
+  font-size: 13px;
+
+  line-height: 1.6;
+}
+
+
+/* ======================================================
+   FLUXO
+====================================================== */
+
+.sobre-fluxo {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 10px;
+}
+
+
+.sobre-fluxo-item {
+  min-width: 80px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  gap: 8px;
+
+  padding: 14px 10px;
+
+  border:
+    1px solid var(--cor-borda-forte);
+
+  border-radius: 10px;
+
+  background:
+    var(--cor-fundo-alt2);
+
+  text-align: center;
+}
+
+
+.sobre-fluxo-item span {
+  width: 24px;
+
+  height: 24px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background:
+    var(--cor-destaque);
+
+  color: #fff;
+
+  font-size: 10px;
+
+  font-weight: 700;
+}
+
+
+.sobre-fluxo-item strong {
+  font-size: 11px;
+}
+
+
+.sobre-fluxo-seta {
+  color:
+    var(--cor-texto-dim);
+}
+
+
+/* ======================================================
+   STATUS
+====================================================== */
+
+.sobre-status {
+  margin-top: 18px;
+
+  padding: 18px;
+
+  border:
+    1px solid var(--cor-borda);
+
+  border-radius: 12px;
+
+  background:
+    var(--cor-fundo-alt);
+}
+
+
+.sobre-status > div {
+  display: flex;
+
+  align-items: center;
+
+  gap: 9px;
+}
+
+
+.sobre-status strong {
+  font-size: 13px;
+}
+
+
+.sobre-status-bolinha {
+  width: 8px;
+
+  height: 8px;
+
+  border-radius: 50%;
+
+  background:
+    var(--cor-positiva);
+}
+
+
+.sobre-status p {
+  margin:
+    7px 0 0 17px;
+
+  color:
+    var(--cor-texto-dim);
+
+  font-size: 12px;
+}
+
+
+/* ======================================================
+   RESPONSIVO
+====================================================== */
+
+@media (max-width: 800px) {
+
+  .sobre-arquitetura {
+    grid-template-columns: 1fr;
+  }
+
+}
+
+
+@media (max-width: 650px) {
+
+  .sobre-hero {
+    padding: 24px;
+  }
+
+
+  .sobre-hero h1 {
+    font-size: 29px;
+  }
+
+
+  .sobre-grid {
+    grid-template-columns: 1fr;
+  }
+
+
+  .sobre-funcionalidades {
+    grid-template-columns: 1fr;
+  }
+
+
+  .sobre-fluxo {
+    flex-direction: column;
+  }
+
+
+  .sobre-fluxo-seta {
+    transform: rotate(90deg);
+  }
+
+
+  .sobre-fluxo-item {
+    width: 100%;
+  }
+
+}

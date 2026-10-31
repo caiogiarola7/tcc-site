@@ -1,0 +1,392 @@
+/* ======================================================
+   ACABAMENTO GERAL DO CODEHELPER
+====================================================== */
+
+
+/* ======================================================
+   ANIMAÇÃO DAS TELAS
+====================================================== */
+
+.painel.ativo {
+  animation:
+    painelEntrada
+    0.18s ease-out;
+}
+
+
+@keyframes painelEntrada {
+
+  from {
+    opacity: 0;
+    transform:
+      translateY(4px);
+  }
+
+  to {
+    opacity: 1;
+    transform:
+      translateY(0);
+  }
+
+}
+
+
+/* ======================================================
+   LOGO
+====================================================== */
+
+.brand {
+  user-select: none;
+
+  transition:
+    opacity 0.15s,
+    transform 0.15s;
+}
+
+
+.brand:hover {
+  opacity: 0.85;
+
+  transform:
+    translateX(2px);
+}
+
+
+.brand:focus-visible {
+  outline:
+    2px solid
+    var(--cor-destaque);
+
+  outline-offset: 5px;
+
+  border-radius: 5px;
+}
+
+
+/* ======================================================
+   SIDEBAR
+====================================================== */
+
+.sidebar-nav {
+  position: relative;
+}
+
+
+.sidebar-nav::before {
+  content:
+    'NAVEGAÇÃO';
+
+  display: block;
+
+  margin:
+    4px 10px 8px;
+
+  color:
+    var(--cor-texto-dim);
+
+  font-size: 9px;
+
+  font-weight: 700;
+
+  letter-spacing: 0.1em;
+
+  opacity: 0.65;
+}
+
+
+.sidebar-nav .aba-btn {
+  position: relative;
+
+  overflow: hidden;
+
+  transition:
+    background 0.15s,
+    color 0.15s,
+    transform 0.15s;
+}
+
+
+.sidebar-nav .aba-btn:hover {
+  transform:
+    translateX(2px);
+}
+
+
+.sidebar-nav .aba-btn.ativo::before {
+  content: '';
+
+  position: absolute;
+
+  left: 0;
+
+  top: 25%;
+
+  bottom: 25%;
+
+  width: 3px;
+
+  border-radius:
+    0 4px 4px 0;
+
+  background:
+    var(--cor-destaque);
+}
+
+
+/* ======================================================
+   NOVA CONVERSA
+====================================================== */
+
+.botao-nova-conversa {
+  transition:
+    border-color 0.15s,
+    background 0.15s,
+    transform 0.15s;
+}
+
+
+.botao-nova-conversa:hover {
+  transform:
+    translateY(-1px);
+
+  border-color:
+    var(--cor-destaque);
+}
+
+
+.botao-nova-conversa:active {
+  transform:
+    translateY(0);
+}
+
+
+/* ======================================================
+   HISTÓRICO
+====================================================== */
+
+.lista-conversas:empty::before {
+  content:
+    'Nenhuma conversa ainda';
+
+  display: block;
+
+  padding:
+    10px 12px;
+
+  color:
+    var(--cor-texto-dim);
+
+  font-size: 11px;
+
+  line-height: 1.4;
+
+  opacity: 0.7;
+}
+
+
+.item-conversa {
+  transition:
+    background 0.15s,
+    color 0.15s;
+}
+
+
+.item-conversa:hover {
+  background:
+    var(--cor-fundo-alt2);
+}
+
+
+/* ======================================================
+   CHAT VAZIO
+====================================================== */
+
+.chat-mensagens:empty {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  text-align: center;
+}
+
+
+.chat-mensagens:empty::before {
+  content:
+    'CodeHelper\A\A Como posso ajudar?\A Pergunte sobre programação ou envie um código para analisar.';
+
+  display: block;
+
+  max-width: 420px;
+
+  padding: 30px;
+
+  white-space: pre-line;
+
+  color:
+    var(--cor-texto-dim);
+
+  font-size: 14px;
+
+  line-height: 1.6;
+}
+
+
+/* ======================================================
+   CAMPOS
+====================================================== */
+
+input,
+textarea,
+select {
+  transition:
+    border-color 0.15s,
+    box-shadow 0.15s;
+}
+
+
+input:focus,
+textarea:focus,
+select:focus {
+  border-color:
+    var(--cor-destaque);
+
+  box-shadow:
+    0 0 0 3px
+    rgba(120, 100, 255, 0.08);
+}
+
+
+/* ======================================================
+   BOTÕES
+====================================================== */
+
+button {
+  transition:
+    opacity 0.15s,
+    transform 0.15s,
+    background 0.15s,
+    border-color 0.15s,
+    color 0.15s;
+}
+
+
+button:focus-visible {
+  outline:
+    2px solid
+    var(--cor-destaque);
+
+  outline-offset: 2px;
+}
+
+
+button:disabled {
+  opacity: 0.55;
+
+  cursor: not-allowed;
+}
+
+
+/* ======================================================
+   CARDS
+====================================================== */
+
+.dashboard-card,
+.sobre-card,
+.dashboard-stat,
+.dashboard-recurso,
+.sobre-funcionalidade,
+.config-bloco {
+  transition:
+    border-color 0.15s,
+    transform 0.15s;
+}
+
+
+.dashboard-stat:hover,
+.dashboard-recurso:hover,
+.sobre-card:hover,
+.sobre-funcionalidade:hover {
+  border-color:
+    var(--cor-borda-forte);
+}
+
+
+/* ======================================================
+   TÍTULOS DAS PÁGINAS
+====================================================== */
+
+.painel > h2:first-child {
+  letter-spacing:
+    -0.4px;
+}
+
+
+/* ======================================================
+   SELEÇÃO DE TEXTO
+====================================================== */
+
+::selection {
+  background:
+    var(--cor-destaque);
+
+  color: #fff;
+}
+
+
+/* ======================================================
+   LINKS / ELEMENTOS CLICÁVEIS
+====================================================== */
+
+.chip,
+.chip-relacionado,
+.glossario-btn,
+.quiz-btn-revisar,
+.playground-btn-secundario,
+.analisador-btn-secundario {
+  transition:
+    background 0.15s,
+    border-color 0.15s,
+    color 0.15s,
+    transform 0.15s;
+}
+
+
+.chip:hover,
+.chip-relacionado:hover {
+  transform:
+    translateY(-1px);
+}
+
+
+/* ======================================================
+   PAINÉIS
+====================================================== */
+
+.app-conteudo {
+  scroll-behavior:
+    smooth;
+}
+
+
+/* ======================================================
+   MOBILE
+====================================================== */
+
+@media (max-width: 600px) {
+
+  .sidebar-nav::before {
+    display: none;
+  }
+
+
+  .chat-mensagens:empty::before {
+    padding:
+      20px;
+
+    font-size:
+      13px;
+  }
+
+}

@@ -1,0 +1,1681 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>
+    CodeHelper — Assistente de Programação
+  </title>
+
+  <link
+    rel="stylesheet"
+    href="style.css"
+  >
+
+  <link rel="stylesheet" href="chat-ui.css">
+
+  <link
+    rel="stylesheet"
+    href="playground.css"
+  >
+
+  <link
+    rel="stylesheet"
+    href="dashboard.css"
+  >
+
+  <link
+    rel="stylesheet"
+    href="analisador.css"
+  >
+
+  <link
+    rel="stylesheet"
+    href="glossario.css"
+  >
+
+  <link
+    rel="stylesheet"
+    href="sobre.css"
+  >
+
+  <link
+    rel="stylesheet"
+    href="scrollbar.css"
+  >
+
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/styles/monokai.min.css"
+  >
+
+  <link rel="stylesheet" href="chat-extras.css">
+
+  <link rel="stylesheet" href="chat-input-ui.css">
+  
+</head>
+
+
+<body>
+
+  <div class="app-shell">
+
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar-principal">
+
+      <div class="sidebar-topo">
+
+        <div class="brand">
+          CodeHelper
+        </div>
+
+        <button
+          id="btn-nova-conversa"
+          class="botao-nova-conversa"
+        >
+          + Nova conversa
+        </button>
+
+      </div>
+
+
+      <nav class="sidebar-nav">
+
+        <button
+          class="aba-btn ativo"
+          data-aba="inicio"
+        >
+          Início
+        </button>
+
+        <button
+          class="aba-btn"
+          data-aba="chat"
+        >
+          Chat
+        </button>
+
+        <button
+          class="aba-btn"
+          data-aba="analisador"
+        >
+          Analisar código
+        </button>
+
+        <button
+          class="aba-btn"
+          data-aba="glossario"
+        >
+          Glossário
+        </button>
+
+        <button
+          class="aba-btn"
+          data-aba="quiz"
+        >
+          Quiz
+        </button>
+
+        <button
+          class="aba-btn"
+          data-aba="playground"
+        >
+          Playground
+        </button>
+
+        <button
+          class="aba-btn"
+          data-aba="sobre"
+        >
+          Sobre
+        </button>
+
+        <button
+          class="aba-btn"
+          data-aba="config"
+        >
+          Configurações
+        </button>
+
+      </nav>
+
+
+      <div
+        id="secao-conversas"
+        class="secao-conversas"
+      >
+
+        <div class="sidebar-secao-label">
+          Conversas
+        </div>
+
+        <div
+          id="lista-conversas"
+          class="lista-conversas"
+        ></div>
+
+      </div>
+
+
+      <div
+        id="auth-area"
+        class="auth-area sidebar-rodape"
+      ></div>
+
+    </aside>
+
+
+    <!-- CONTEÚDO -->
+    <main class="app-conteudo">
+
+
+      <!-- ==================================================
+           INÍCIO
+      =================================================== -->
+
+      <section
+        id="painel-inicio"
+        class="painel ativo painel-inicio"
+      >
+
+        <div class="dashboard-hero">
+
+          <div class="dashboard-hero-conteudo">
+
+            <span class="dashboard-tag">
+              CodeHelper
+            </span>
+
+            <h1 id="dashboard-saudacao">
+              Olá!
+            </h1>
+
+            <p>
+              Aprenda programação, tire dúvidas, analise códigos,
+              pratique conceitos e execute seus próprios programas.
+            </p>
+
+
+            <div class="dashboard-hero-acoes">
+
+              <button
+                class="botao-principal dashboard-navegar"
+                data-destino="chat"
+              >
+                Perguntar à IA
+              </button>
+
+              <button
+                class="dashboard-botao-secundario dashboard-navegar"
+                data-destino="analisador"
+              >
+                Analisar código
+              </button>
+
+            </div>
+
+          </div>
+
+
+          <div class="dashboard-hero-codigo">
+
+            <div class="dashboard-codigo-topo">
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+
+            <pre><code>const aprender = true;
+
+if (aprender) {
+  console.log(
+    "Bem-vindo ao CodeHelper!"
+  );
+}</code></pre>
+
+          </div>
+
+        </div>
+
+
+        <div class="dashboard-estatisticas">
+
+          <div class="dashboard-stat">
+
+            <span
+              id="dashboard-total-termos"
+              class="dashboard-stat-numero"
+            >
+              --
+            </span>
+
+            <span class="dashboard-stat-label">
+              termos no glossário
+            </span>
+
+          </div>
+
+
+          <div class="dashboard-stat">
+
+            <span
+              id="dashboard-total-favoritos"
+              class="dashboard-stat-numero"
+            >
+              --
+            </span>
+
+            <span class="dashboard-stat-label">
+              favoritos
+            </span>
+
+          </div>
+
+
+          <div class="dashboard-stat">
+
+            <span
+              id="dashboard-total-conversas"
+              class="dashboard-stat-numero"
+            >
+              --
+            </span>
+
+            <span class="dashboard-stat-label">
+              conversas salvas
+            </span>
+
+          </div>
+
+        </div>
+
+
+        <div class="dashboard-secao">
+
+          <div class="dashboard-secao-cabecalho">
+
+            <div>
+
+              <h2>
+                Ferramentas
+              </h2>
+
+              <p>
+                Escolha como você quer estudar agora.
+              </p>
+
+            </div>
+
+          </div>
+
+
+          <div class="dashboard-grid">
+
+
+            <button
+              class="dashboard-card dashboard-navegar"
+              data-destino="chat"
+            >
+
+              <div class="dashboard-card-icone">
+                AI
+              </div>
+
+              <div class="dashboard-card-conteudo">
+
+                <h3>
+                  Assistente com IA
+                </h3>
+
+                <p>
+                  Tire dúvidas e receba explicações adaptadas para iniciantes.
+                </p>
+
+              </div>
+
+              <span class="dashboard-card-seta">
+                →
+              </span>
+
+            </button>
+
+
+            <button
+              class="dashboard-card dashboard-navegar"
+              data-destino="analisador"
+            >
+
+              <div class="dashboard-card-icone">
+                &lt;/&gt;
+              </div>
+
+              <div class="dashboard-card-conteudo">
+
+                <h3>
+                  Analisador de código
+                </h3>
+
+                <p>
+                  Cole seu código para identificar erros e receber sugestões.
+                </p>
+
+              </div>
+
+              <span class="dashboard-card-seta">
+                →
+              </span>
+
+            </button>
+
+
+            <button
+              class="dashboard-card dashboard-navegar"
+              data-destino="glossario"
+            >
+
+              <div class="dashboard-card-icone">
+                A-Z
+              </div>
+
+              <div class="dashboard-card-conteudo">
+
+                <h3>
+                  Glossário
+                </h3>
+
+                <p>
+                  Consulte conceitos, exemplos e termos relacionados.
+                </p>
+
+              </div>
+
+              <span class="dashboard-card-seta">
+                →
+              </span>
+
+            </button>
+
+
+            <button
+              class="dashboard-card dashboard-navegar"
+              data-destino="quiz"
+            >
+
+              <div class="dashboard-card-icone">
+                ?
+              </div>
+
+              <div class="dashboard-card-conteudo">
+
+                <h3>
+                  Quiz
+                </h3>
+
+                <p>
+                  Teste seus conhecimentos e acompanhe seu progresso.
+                </p>
+
+              </div>
+
+              <span class="dashboard-card-seta">
+                →
+              </span>
+
+            </button>
+
+
+            <button
+              class="dashboard-card dashboard-navegar"
+              data-destino="playground"
+            >
+
+              <div class="dashboard-card-icone">
+                JS
+              </div>
+
+              <div class="dashboard-card-conteudo">
+
+                <h3>
+                  Playground
+                </h3>
+
+                <p>
+                  Escreva e execute JavaScript diretamente no navegador.
+                </p>
+
+              </div>
+
+              <span class="dashboard-card-seta">
+                →
+              </span>
+
+            </button>
+
+          </div>
+
+        </div>
+
+
+        <div class="dashboard-secao">
+
+          <div class="dashboard-secao-cabecalho">
+
+            <div>
+
+              <h2>
+                O que você pode fazer
+              </h2>
+
+              <p>
+                Recursos disponíveis atualmente no CodeHelper.
+              </p>
+
+            </div>
+
+          </div>
+
+
+          <div class="dashboard-recursos">
+
+            <div class="dashboard-recurso">
+
+              <span class="dashboard-recurso-check">
+                ✓
+              </span>
+
+              <div>
+
+                <strong>
+                  Conversar com contexto
+                </strong>
+
+                <p>
+                  A IA acompanha o assunto dentro da conversa.
+                </p>
+
+              </div>
+
+            </div>
+
+
+            <div class="dashboard-recurso">
+
+              <span class="dashboard-recurso-check">
+                ✓
+              </span>
+
+              <div>
+
+                <strong>
+                  Analisar códigos
+                </strong>
+
+                <p>
+                  Encontre erros e receba sugestões de correção.
+                </p>
+
+              </div>
+
+            </div>
+
+
+            <div class="dashboard-recurso">
+
+              <span class="dashboard-recurso-check">
+                ✓
+              </span>
+
+              <div>
+
+                <strong>
+                  Acompanhar progresso
+                </strong>
+
+                <p>
+                  Seus resultados de quiz ficam registrados.
+                </p>
+
+              </div>
+
+            </div>
+
+
+            <div class="dashboard-recurso">
+
+              <span class="dashboard-recurso-check">
+                ✓
+              </span>
+
+              <div>
+
+                <strong>
+                  Praticar JavaScript
+                </strong>
+
+                <p>
+                  Execute códigos no Playground sem sair do site.
+                </p>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <!-- ==================================================
+           CHAT
+      =================================================== -->
+
+      <section
+        id="painel-chat"
+        class="painel"
+      >
+
+        <div
+          id="chat-mensagens"
+          class="chat-mensagens"
+        ></div>
+
+
+        <form
+          id="chat-form"
+          class="chat-form"
+        >
+
+          <div class="chat-input-container">
+
+            <button
+              type="button"
+              id="btn-anexo"
+              class="chat-anexo-btn"
+              aria-label="Adicionar foto ou arquivo"
+              title="Adicionar foto ou arquivo"
+            >
+              <svg
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+              >
+                <path d="M12 5v14"></path>
+                <path d="M5 12h14"></path>
+              </svg>
+            </button>
+
+
+            <input
+              type="file"
+              id="chat-anexos"
+              hidden
+              multiple
+              accept="image/png,image/jpeg,image/webp,image/gif,.pdf,.txt,.js,.jsx,.ts,.tsx,.html,.css,.json,.md,.py,.java,.c,.cpp,.cs,.php,.sql,.xml,.csv,.yaml,.yml,.sh,.log"
+            >
+
+
+            <div class="chat-compose-centro">
+
+              <textarea
+                id="chat-input"
+                placeholder="Pergunte algo ou cole seu código aqui..."
+                autocomplete="off"
+                rows="1"
+                maxlength="12000"
+              ></textarea>
+
+
+              <div
+                id="chat-anexos-preview"
+                class="chat-anexos-preview"
+              ></div>
+
+            </div>
+
+          </div>
+
+
+          <button
+            type="submit"
+            id="btn-enviar"
+            class="chat-enviar-btn"
+            aria-label="Enviar mensagem"
+            title="Enviar"
+          >
+
+            <svg
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+            >
+              <path d="M12 19V5"></path>
+              <path d="m6 11 6-6 6 6"></path>
+            </svg>
+
+          </button>
+
+        </form>
+
+      </section>
+
+
+      <!-- ==================================================
+           ANALISADOR
+      =================================================== -->
+
+      <section
+        id="painel-analisador"
+        class="painel"
+      >
+
+        <div class="analisador-topo">
+
+          <div>
+
+            <h2>
+              Analisador de código
+            </h2>
+
+            <p>
+              Cole seu código e deixe o CodeHelper procurar erros,
+              explicar problemas e sugerir correções.
+            </p>
+
+          </div>
+
+        </div>
+
+
+        <div class="analisador-config">
+
+          <label for="analisador-linguagem">
+            Linguagem
+          </label>
+
+          <select id="analisador-linguagem">
+
+            <option value="JavaScript">
+              JavaScript
+            </option>
+
+            <option value="Python">
+              Python
+            </option>
+
+            <option value="Java">
+              Java
+            </option>
+
+            <option value="C">
+              C
+            </option>
+
+            <option value="C++">
+              C++
+            </option>
+
+            <option value="C#">
+              C#
+            </option>
+
+            <option value="PHP">
+              PHP
+            </option>
+
+            <option value="TypeScript">
+              TypeScript
+            </option>
+
+            <option value="Outra">
+              Outra
+            </option>
+
+          </select>
+
+        </div>
+
+
+        <div class="analisador-editor">
+
+          <div class="analisador-editor-topo">
+
+            <span>
+              Código
+            </span>
+
+            <span id="analisador-contador">
+              0 caracteres
+            </span>
+
+          </div>
+
+
+          <textarea
+            id="analisador-codigo"
+            maxlength="20000"
+            spellcheck="false"
+            placeholder="// Cole seu código aqui..."
+          ></textarea>
+
+        </div>
+
+
+        <div class="analisador-acoes">
+
+          <button
+            id="btn-analisar-codigo"
+            class="botao-principal"
+          >
+            Analisar código
+          </button>
+
+          <button
+            id="btn-limpar-analise"
+            class="analisador-btn-secundario"
+          >
+            Limpar
+          </button>
+
+        </div>
+
+
+        <div
+          id="analisador-resultado-container"
+          class="analisador-resultado-container"
+        >
+
+          <div class="analisador-resultado-topo">
+
+            <span>
+              Resultado da análise
+            </span>
+
+            <span
+              id="analisador-status"
+              class="analisador-status"
+            >
+              Aguardando código
+            </span>
+
+          </div>
+
+
+          <div
+            id="analisador-resultado"
+            class="analisador-resultado"
+          >
+
+            <p class="analisador-placeholder">
+              A análise aparecerá aqui.
+            </p>
+
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <!-- ==================================================
+           GLOSSÁRIO
+      =================================================== -->
+
+      <section
+        id="painel-glossario"
+        class="painel"
+      >
+
+        <input
+          id="search"
+          type="text"
+          placeholder="Buscar termo... ex: for, variável"
+        >
+
+
+        <div
+          class="filtros"
+          id="filtros"
+        >
+
+          <button
+            class="chip ativo"
+            data-cat="todos"
+          >
+            todos
+          </button>
+
+          <button
+            class="chip"
+            data-cat="controle"
+          >
+            estruturas de controle
+          </button>
+
+          <button
+            class="chip"
+            data-cat="funcao"
+          >
+            funções
+          </button>
+
+          <button
+            class="chip"
+            data-cat="dados"
+          >
+            variáveis e dados
+          </button>
+
+          <button
+            class="chip"
+            data-cat="poo"
+          >
+            orientação a objetos
+          </button>
+
+          <button
+            class="chip"
+            data-cat="avancado"
+          >
+            avançado
+          </button>
+
+          <button
+            class="chip"
+            id="btn-filtro-favoritos"
+          >
+            ★ favoritos
+          </button>
+
+        </div>
+
+        <div id="lista"></div>
+
+      </section>
+
+
+      <!-- ==================================================
+           QUIZ
+      =================================================== -->
+
+      <section
+        id="painel-quiz"
+        class="painel"
+      >
+
+        <div id="quiz-inicio">
+
+          <h2>
+            Quiz de programação
+          </h2>
+
+          <p class="config-descricao">
+            Teste o que você aprendeu com perguntas geradas a partir do glossário.
+          </p>
+
+          <button
+            id="btn-iniciar-quiz"
+            class="botao-principal"
+          >
+            Começar quiz
+          </button>
+
+        </div>
+
+
+        <div
+          id="quiz-jogo"
+          class="quiz-jogo"
+        >
+
+          <div class="quiz-progresso">
+
+            <span id="quiz-contador"></span>
+
+            <span id="quiz-pontuacao"></span>
+
+          </div>
+
+          <div
+            class="quiz-pergunta"
+            id="quiz-pergunta"
+          ></div>
+
+          <div
+            class="quiz-opcoes"
+            id="quiz-opcoes"
+          ></div>
+
+          <button
+            id="btn-proxima-pergunta"
+            class="botao-principal quiz-proxima"
+          >
+            Próxima pergunta
+          </button>
+
+        </div>
+
+
+        <div
+          id="quiz-fim"
+          class="quiz-fim"
+        >
+
+          <h2>
+            Resultado
+          </h2>
+
+          <p id="quiz-resultado-texto"></p>
+
+          <button
+            id="btn-refazer-quiz"
+            class="botao-principal"
+          >
+            Refazer quiz
+          </button>
+
+        </div>
+
+      </section>
+
+
+      <!-- ==================================================
+           PLAYGROUND
+      =================================================== -->
+
+      <section
+        id="painel-playground"
+        class="painel"
+      >
+
+        <div class="playground-topo">
+
+          <div>
+
+            <h2>
+              Playground
+            </h2>
+
+            <p>
+              Escreva e execute códigos JavaScript diretamente no CodeHelper.
+            </p>
+
+          </div>
+
+          <span class="playground-linguagem">
+            JavaScript
+          </span>
+
+        </div>
+
+
+        <div class="playground-editor-container">
+
+          <div class="playground-editor-topo">
+
+            <span>
+              editor.js
+            </span>
+
+            <span>
+              JavaScript
+            </span>
+
+          </div>
+
+          <textarea
+            id="playground-codigo"
+            spellcheck="false"
+            autocomplete="off"
+            placeholder="// Escreva seu código JavaScript aqui..."
+          >const nome = "CodeHelper";
+
+for (let i = 1; i <= 3; i++) {
+  console.log("Olá, " + nome + "! Execução " + i);
+}</textarea>
+
+        </div>
+
+
+        <div class="playground-acoes">
+
+          <button
+            id="btn-executar-codigo"
+            class="botao-principal"
+          >
+            ▶ Executar
+          </button>
+
+          <button
+            id="btn-limpar-codigo"
+            class="playground-btn-secundario"
+          >
+            Limpar código
+          </button>
+
+          <button
+            id="btn-limpar-saida"
+            class="playground-btn-secundario"
+          >
+            Limpar saída
+          </button>
+
+        </div>
+
+
+        <div class="playground-console">
+
+          <div class="playground-console-topo">
+
+            <span>
+              Console
+            </span>
+
+            <span
+              id="playground-status"
+              class="playground-status"
+            >
+              Pronto
+            </span>
+
+          </div>
+
+          <pre
+            id="playground-saida"
+            class="playground-saida"
+          ><span class="playground-placeholder">A saída do seu código aparecerá aqui.</span></pre>
+
+        </div>
+
+
+        <p class="playground-aviso">
+          O Playground executa JavaScript em um ambiente separado e possui limite de tempo para evitar travamentos.
+        </p>
+
+      </section>
+
+
+      <!-- ==================================================
+           SOBRE
+      =================================================== -->
+
+      <section
+        id="painel-sobre"
+        class="painel sobre-painel"
+      >
+
+        <div class="sobre-hero">
+
+          <span class="sobre-tag">
+            Projeto acadêmico
+          </span>
+
+          <h1>
+            Sobre o CodeHelper
+          </h1>
+
+          <p>
+            Uma plataforma educacional criada para ajudar estudantes
+            e iniciantes a aprender programação de forma mais simples,
+            prática e interativa.
+          </p>
+
+        </div>
+
+
+        <div class="sobre-grid">
+
+
+          <article class="sobre-card">
+
+            <span class="sobre-card-numero">
+              01
+            </span>
+
+            <h2>
+              Objetivo
+            </h2>
+
+            <p>
+              O CodeHelper busca reunir diferentes ferramentas de apoio
+              ao aprendizado de programação em uma única plataforma.
+            </p>
+
+            <p>
+              O usuário pode estudar conceitos, praticar código,
+              testar seus conhecimentos e utilizar inteligência artificial
+              para esclarecer dúvidas.
+            </p>
+
+          </article>
+
+
+          <article class="sobre-card">
+
+            <span class="sobre-card-numero">
+              02
+            </span>
+
+            <h2>
+              Público-alvo
+            </h2>
+
+            <p>
+              A plataforma foi pensada principalmente para estudantes
+              e pessoas que estão iniciando seus estudos em programação.
+            </p>
+
+            <p>
+              As explicações priorizam uma linguagem simples e exemplos
+              práticos para facilitar a compreensão.
+            </p>
+
+          </article>
+
+
+          <article class="sobre-card">
+
+            <span class="sobre-card-numero">
+              03
+            </span>
+
+            <h2>
+              Aprendizado interativo
+            </h2>
+
+            <p>
+              Em vez de funcionar apenas como um glossário,
+              o CodeHelper permite que o usuário interaja diretamente
+              com o conteúdo.
+            </p>
+
+            <p>
+              É possível conversar com a IA, analisar códigos,
+              responder quizzes e executar JavaScript.
+            </p>
+
+          </article>
+
+
+          <article class="sobre-card">
+
+            <span class="sobre-card-numero">
+              04
+            </span>
+
+            <h2>
+              Progresso individual
+            </h2>
+
+            <p>
+              Usuários cadastrados podem manter seu histórico
+              de conversas, favoritos e resultados obtidos nos quizzes.
+            </p>
+
+            <p>
+              Dessa forma, a plataforma também oferece uma experiência
+              personalizada para cada usuário.
+            </p>
+
+          </article>
+
+        </div>
+
+
+        <div class="sobre-secao">
+
+          <div class="sobre-secao-titulo">
+
+            <span>
+              FUNCIONALIDADES
+            </span>
+
+            <h2>
+              Principais recursos
+            </h2>
+
+          </div>
+
+
+          <div class="sobre-funcionalidades">
+
+
+            <div class="sobre-funcionalidade">
+
+              <div class="sobre-icone">
+                AI
+              </div>
+
+              <div>
+
+                <strong>
+                  Chat com inteligência artificial
+                </strong>
+
+                <p>
+                  Assistente voltado para dúvidas de programação
+                  com suporte a contexto de conversa.
+                </p>
+
+              </div>
+
+            </div>
+
+
+            <div class="sobre-funcionalidade">
+
+              <div class="sobre-icone">
+                &lt;/&gt;
+              </div>
+
+              <div>
+
+                <strong>
+                  Analisador de código
+                </strong>
+
+                <p>
+                  Identifica problemas, explica possíveis erros
+                  e apresenta sugestões de correção.
+                </p>
+
+              </div>
+
+            </div>
+
+
+            <div class="sobre-funcionalidade">
+
+              <div class="sobre-icone">
+                A-Z
+              </div>
+
+              <div>
+
+                <strong>
+                  Glossário de programação
+                </strong>
+
+                <p>
+                  Conceitos organizados por categorias,
+                  exemplos e integração direta com a IA.
+                </p>
+
+              </div>
+
+            </div>
+
+
+            <div class="sobre-funcionalidade">
+
+              <div class="sobre-icone">
+                ?
+              </div>
+
+              <div>
+
+                <strong>
+                  Quiz
+                </strong>
+
+                <p>
+                  Perguntas para testar conhecimentos
+                  e acompanhar resultados anteriores.
+                </p>
+
+              </div>
+
+            </div>
+
+
+            <div class="sobre-funcionalidade">
+
+              <div class="sobre-icone">
+                JS
+              </div>
+
+              <div>
+
+                <strong>
+                  Playground
+                </strong>
+
+                <p>
+                  Ambiente para escrever e executar
+                  código JavaScript diretamente no navegador.
+                </p>
+
+              </div>
+
+            </div>
+
+
+            <div class="sobre-funcionalidade">
+
+              <div class="sobre-icone">
+                ★
+              </div>
+
+              <div>
+
+                <strong>
+                  Histórico e favoritos
+                </strong>
+
+                <p>
+                  Recursos associados à conta do usuário
+                  para facilitar a continuidade dos estudos.
+                </p>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <div class="sobre-secao">
+
+          <div class="sobre-secao-titulo">
+
+            <span>
+              TECNOLOGIAS
+            </span>
+
+            <h2>
+              Tecnologias utilizadas
+            </h2>
+
+          </div>
+
+
+          <div class="sobre-tecnologias">
+
+            <div class="sobre-tech">
+              HTML
+            </div>
+
+            <div class="sobre-tech">
+              CSS
+            </div>
+
+            <div class="sobre-tech">
+              JavaScript
+            </div>
+
+            <div class="sobre-tech">
+              Node.js
+            </div>
+
+            <div class="sobre-tech">
+              Express
+            </div>
+
+            <div class="sobre-tech">
+              Supabase
+            </div>
+
+            <div class="sobre-tech">
+              Gemini
+            </div>
+
+            <div class="sobre-tech">
+              REST API
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <div class="sobre-arquitetura">
+
+          <div>
+
+            <span class="sobre-arquitetura-tag">
+              COMO FUNCIONA
+            </span>
+
+            <h2>
+              Estrutura do sistema
+            </h2>
+
+            <p>
+              O frontend é responsável pela interface e interação com
+              o usuário. O servidor Node.js processa as requisições
+              relacionadas à inteligência artificial.
+            </p>
+
+            <p>
+              O Supabase é utilizado para autenticação e armazenamento
+              de informações relacionadas aos usuários.
+            </p>
+
+          </div>
+
+
+          <div class="sobre-fluxo">
+
+            <div class="sobre-fluxo-item">
+
+              <span>
+                1
+              </span>
+
+              <strong>
+                Usuário
+              </strong>
+
+            </div>
+
+            <div class="sobre-fluxo-seta">
+              →
+            </div>
+
+            <div class="sobre-fluxo-item">
+
+              <span>
+                2
+              </span>
+
+              <strong>
+                CodeHelper
+              </strong>
+
+            </div>
+
+            <div class="sobre-fluxo-seta">
+              →
+            </div>
+
+            <div class="sobre-fluxo-item">
+
+              <span>
+                3
+              </span>
+
+              <strong>
+                Serviços
+              </strong>
+
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <div class="sobre-status">
+
+          <div>
+
+            <span class="sobre-status-bolinha"></span>
+
+            <strong>
+              Projeto em desenvolvimento
+            </strong>
+
+          </div>
+
+          <p>
+            Novos recursos e melhorias podem ser adicionados
+            durante a evolução do projeto.
+          </p>
+
+        </div>
+
+      </section>
+
+
+      <!-- ==================================================
+           CONFIGURAÇÕES
+      =================================================== -->
+
+      <section
+        id="painel-config"
+        class="painel"
+      >
+
+        <h2>
+          Configurações
+        </h2>
+
+
+        <div class="config-bloco">
+
+          <h3>
+            Aparência
+          </h3>
+
+          <div class="tema-toggle">
+
+            <span>
+              Tema escuro
+            </span>
+
+            <label class="switch">
+
+              <input
+                type="checkbox"
+                id="toggle-tema"
+              >
+
+              <span class="slider"></span>
+
+            </label>
+
+            <span>
+              Tema claro
+            </span>
+
+          </div>
+
+        </div>
+
+
+        <div class="config-bloco">
+
+          <h3>
+            Perfil
+          </h3>
+
+          <form id="form-perfil">
+
+            <label for="perfil-nome">
+              Nome
+            </label>
+
+            <input
+              id="perfil-nome"
+              type="text"
+              placeholder="Seu nome"
+            >
+
+            <label for="perfil-email">
+              E-mail
+            </label>
+
+            <input
+              id="perfil-email"
+              type="email"
+              placeholder="seu@email.com"
+            >
+
+            <button type="submit">
+              Salvar alterações
+            </button>
+
+          </form>
+
+          <p
+            id="perfil-status"
+            class="config-status"
+          ></p>
+
+        </div>
+
+
+        <div class="config-bloco">
+
+          <h3>
+            Histórico
+          </h3>
+
+          <p class="config-descricao">
+            Isso apaga permanentemente todas as suas conversas salvas.
+          </p>
+
+          <button
+            id="btn-apagar-historico"
+            class="botao-perigo"
+          >
+            Apagar histórico de conversas
+          </button>
+
+        </div>
+
+      </section>
+
+    </main>
+
+  </div>
+
+
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+  <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/highlight.min.js"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <script src="config.js"></script>
+
+  <script src="app.js"></script>
+
+  <script src="playground.js"></script>
+
+  <script src="dashboard.js"></script>
+
+  <script src="termos-visitados.js"></script>
+
+  <script src="progresso.js"></script>
+
+  <script src="analisador.js"></script>
+
+  <script src="glossario.js"></script>
+
+  <script src="navegacao.js"></script>
+
+  <script src="conversas-ui.js"></script>
+
+
+</body>
+
+</html>
