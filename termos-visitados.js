@@ -1,5 +1,5 @@
 (() => {
-  const ID_CONTADOR = 'dashboard-total-termos';
+  const ID_CONTADOR = 'dashboard-termos-estudados';
 
   let totalTermos = 0;
   let nomesValidos = new Set();

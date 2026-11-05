@@ -84,6 +84,11 @@ function prepararEstatisticas() {
       tipo: 'termos'
     },
     {
+      elemento: document.getElementById('dashboard-termos-estudados'),
+      icone: DASHBOARD_ICONES.termos,
+      tipo: 'estudados'
+    },
+    {
       elemento: dashboardTotalFavoritos,
       icone: DASHBOARD_ICONES.favoritos,
       tipo: 'favoritos'

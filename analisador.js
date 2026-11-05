@@ -406,9 +406,16 @@ if (
     limparAnalisador
   );
 
-  analisadorCodigo.addEventListener(
-    'keydown',
-    evento => {
+  analisadorCodigo.addEventListener('keydown', evento => {
+    if (evento.key === 'Tab') {
+      evento.preventDefault();
+      const inicio = analisadorCodigo.selectionStart;
+      const fim = analisadorCodigo.selectionEnd;
+      analisadorCodigo.value = analisadorCodigo.value.substring(0, inicio) + '  ' + analisadorCodigo.value.substring(fim);
+      analisadorCodigo.selectionStart = analisadorCodigo.selectionEnd = inicio + 2;
+      atualizarContadorAnalisador();
+      return;
+    }
       if (evento.key === 'Enter' && evento.ctrlKey) {
         evento.preventDefault();
         analisarCodigo();

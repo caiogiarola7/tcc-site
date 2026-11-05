@@ -1,6 +1,16 @@
+
 (() => {
   if (window.__codehelperNavegacaoInicializada) return;
   window.__codehelperNavegacaoInicializada = true;
+
+  function obterClienteSupabase() {
+    try {
+      return window.supabaseClient ||
+        (typeof supabaseClient !== 'undefined' ? supabaseClient : null);
+    } catch {
+      return window.supabaseClient || null;
+    }
+  }
 
   function carregarCSS(href) {
     if (document.querySelector(`link[href="${href}"]`)) return;
@@ -21,7 +31,49 @@
   const authArea = document.getElementById('auth-area');
   const chatInput = document.getElementById('chat-input');
 
+  function fecharSidebarMobile() {
+    const s = document.querySelector('.sidebar-principal');
+    const b = document.getElementById('sidebar-backdrop');
+    s?.classList.remove('aberta');
+    b?.classList.remove('visivel');
+  }
+
+  function abrirSidebarMobile() {
+    const s = document.querySelector('.sidebar-principal');
+    const b = document.getElementById('sidebar-backdrop');
+    s?.classList.add('aberta');
+    b?.classList.add('visivel');
+  }
+
+  const btnMenuMobile = document.getElementById('btn-menu-mobile');
+  const sidebarBackdrop = document.getElementById('sidebar-backdrop');
+  const btnNovaConversaMobile = document.getElementById('btn-nova-conversa-mobile');
+  const mobileBrandBtn = document.getElementById('mobile-brand-btn');
+
+  btnMenuMobile?.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const s = document.querySelector('.sidebar-principal');
+    if (s?.classList.contains('aberta')) {
+      fecharSidebarMobile();
+    } else {
+      abrirSidebarMobile();
+    }
+  });
+
+  sidebarBackdrop?.addEventListener('click', fecharSidebarMobile);
+
+  mobileBrandBtn?.addEventListener('click', () => {
+    navegarPara('inicio');
+    fecharSidebarMobile();
+  });
+
+  btnNovaConversaMobile?.addEventListener('click', () => {
+    fecharSidebarMobile();
+    document.getElementById('btn-nova-conversa')?.click();
+  });
+
   function navegarPara(destino) {
+    fecharSidebarMobile();
     const botao = document.querySelector(`.aba-btn[data-aba="${destino}"]`);
     if (botao) botao.click();
   }
@@ -175,8 +227,8 @@
           <span class="perfil-avatar-inicial">U</span>
         </span>
         <span class="perfil-resumo">
-          <strong class="perfil-nome">Usuário</strong>
-          <span class="perfil-status">CodeHelper</span>
+          <strong class="perfil-nome">Carregando...</strong>
+          <span class="perfil-status">Verificando conta</span>
         </span>
         <svg class="perfil-chevron" viewBox="0 0 24 24">
           <path d="m9 18 6-6-6-6"/>
@@ -380,19 +432,17 @@
     });
   }
 
-  async function carregarConta() {
-    if (!window.supabaseClient?.auth) {
-      mostrarConvidado();
-      return;
-    }
-
+  async function carregarConta(cliente) {
     try {
-      const { data, error } = await window.supabaseClient.auth.getSession();
+      const { data, error } = await cliente.auth.getSession();
 
       if (error) throw error;
 
-      if (data?.session?.user) mostrarUsuario(data.session.user);
-      else mostrarConvidado();
+      if (data?.session?.user) {
+        mostrarUsuario(data.session.user);
+      } else {
+        mostrarConvidado();
+      }
     } catch (erro) {
       console.error('Erro ao carregar conta:', erro);
       mostrarConvidado();
@@ -442,10 +492,11 @@
           return;
         }
 
-        if (!window.supabaseClient?.auth) return;
+        const cliente = obterClienteSupabase();
+        if (!cliente?.auth) return;
 
         try {
-          const { error } = await window.supabaseClient.auth.signOut();
+          const { error } = await cliente.auth.signOut();
           if (error) throw error;
           window.location.href = 'index.html';
         } catch (erro) {
@@ -455,12 +506,29 @@
     });
   });
 
-  if (window.supabaseClient?.auth) {
-    window.supabaseClient.auth.onAuthStateChange((evento, sessao) => {
-      if (sessao?.user) mostrarUsuario(sessao.user);
-      else mostrarConvidado();
-    });
-  }
+  let tentativasCliente = 0;
 
-  carregarConta();
+  const verificacaoCliente = setInterval(() => {
+    const cliente = obterClienteSupabase();
+
+    if (cliente?.auth) {
+      clearInterval(verificacaoCliente);
+
+      cliente.auth.onAuthStateChange((evento, sessao) => {
+        if (sessao?.user) mostrarUsuario(sessao.user);
+        else mostrarConvidado();
+      });
+
+      carregarConta(cliente);
+      return;
+    }
+
+    tentativasCliente++;
+
+    if (tentativasCliente >= 100) {
+      clearInterval(verificacaoCliente);
+      console.error('Cliente Supabase não foi encontrado pela navegação.');
+      mostrarConvidado();
+    }
+  }, 100);
 })();
