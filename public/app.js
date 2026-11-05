@@ -1,8 +1,9 @@
-
 const supabaseClient = window.supabase.createClient(
   SUPABASE_URL,
   SUPABASE_ANON_KEY
 );
+
+window.supabaseClient = supabaseClient;
 
 let usuarioAtual = null;
 let modoConvidado = false;
@@ -138,53 +139,62 @@ function destacarCodigo(elemento) {
 
   elemento.querySelectorAll('pre code').forEach((bloco) => {
     if (!bloco.dataset.highlighted) {
-      hljs.highlightElement(bloco);
+      try {
+        hljs.highlightElement(bloco);
+      } catch {}
+    }
+
+    const pre = bloco.parentElement;
+    if (pre && !pre.dataset.hasToolbar && pre.tagName === 'PRE') {
+      pre.dataset.hasToolbar = 'true';
+
+      let lang = 'código';
+      bloco.classList.forEach((cls) => {
+        if (cls.startsWith('language-')) {
+          lang = cls.replace('language-', '');
+        }
+      });
+
+      const toolbar = document.createElement('div');
+      toolbar.className = 'codigo-bloco-toolbar';
+      toolbar.innerHTML = `
+        <div class="codigo-dots" aria-hidden="true">
+          <span></span><span></span><span></span>
+        </div>
+        <span class="codigo-linguagem">${escaparHTML(lang)}</span>
+        <button type="button" class="btn-copiar-codigo-bloco" title="Copiar código" aria-label="Copiar código">
+          <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect width="14" height="14" x="8" y="8" rx="2" ry="2"/>
+            <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/>
+          </svg>
+          <span>Copiar</span>
+        </button>
+      `;
+
+      const btnCopiar = toolbar.querySelector('.btn-copiar-codigo-bloco');
+      btnCopiar.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const textoParaCopiar = bloco.textContent || '';
+        if (navigator.clipboard?.writeText) {
+          navigator.clipboard.writeText(textoParaCopiar).then(() => {
+            btnCopiar.classList.add('copiado');
+            btnCopiar.querySelector('span').textContent = 'Copiado! ✓';
+            setTimeout(() => {
+              btnCopiar.classList.remove('copiado');
+              btnCopiar.querySelector('span').textContent = 'Copiar';
+            }, 1800);
+          });
+        }
+      });
+
+      pre.insertAdjacentElement('beforebegin', toolbar);
+      const wrapper = document.createElement('div');
+      wrapper.className = 'codigo-bloco-wrapper';
+      pre.parentNode.insertBefore(wrapper, toolbar);
+      wrapper.appendChild(toolbar);
+      wrapper.appendChild(pre);
     }
   });
-}
-
-document.querySelectorAll('.aba-btn').forEach((btn) => {
-  btn.addEventListener('click', () => {
-    document.querySelectorAll('.aba-btn').forEach((item) => {
-      item.classList.remove('ativo');
-    });
-
-    document.querySelectorAll('.painel').forEach((painel) => {
-      painel.classList.remove('ativo');
-    });
-
-    btn.classList.add('ativo');
-
-    const painel = document.getElementById(
-      'painel-' + btn.dataset.aba
-    );
-
-    painel?.classList.add('ativo');
-  });
-});
-
-async function carregarTermos() {
-  try {
-    const resposta = await fetch('/api/termos');
-
-    if (!resposta.ok) {
-      throw new Error('Erro ao carregar glossário.');
-    }
-
-    const dados = await resposta.json();
-
-    TERMOS = Array.isArray(dados) ? dados : [];
-
-    renderizar(TERMOS);
-  } catch (erro) {
-    console.error('Erro ao carregar termos:', erro);
-
-    const lista = document.getElementById('lista');
-
-    if (lista) {
-      lista.textContent = 'Não foi possível carregar o glossário.';
-    }
-  }
 }
 
 async function carregarFavoritos() {
@@ -1017,9 +1027,7 @@ function iniciarTelaConversaVazia() {
   limparAnexosSelecionados();
   fecharMenuAnexo();
 
-  if (chatMensagens) {
-    chatMensagens.innerHTML = '';
-  }
+  renderizarEstadoVazioChat();
 
   document.querySelectorAll('.item-conversa').forEach((item) => {
     item.classList.remove('ativo');
@@ -1027,6 +1035,71 @@ function iniciarTelaConversaVazia() {
 
   chatInput?.focus();
 }
+function renderizarEstadoVazioChat() {
+  if (!chatMensagens) return;
+  chatMensagens.innerHTML = '';
+
+  const vazio = document.createElement('div');
+  vazio.className = 'chat-estado-vazio';
+  vazio.innerHTML = `
+    <div class="chat-vazio-avatar">
+      <span>&lt;/&gt;</span>
+    </div>
+    <h2>Como posso te ajudar a programar hoje?</h2>
+    <p>Tire dúvidas, envie códigos para correção ou peça explicações de qualquer conceito de programação.</p>
+    
+    <div class="chat-vazio-sugestoes">
+      <button type="button" class="chat-sugestao-card" data-prompt="Por que meu loop while não para de executar? Pode me explicar loops infinitos e como evitar?">
+        <span class="chat-sugestao-icone">🔄</span>
+        <div class="chat-sugestao-texto">
+          <strong>Loop infinito</strong>
+          <span>Por que meu loop while não para de executar?</span>
+        </div>
+        <span class="chat-sugestao-seta">→</span>
+      </button>
+
+      <button type="button" class="chat-sugestao-card" data-prompt="Qual a diferença prática entre let, const e var em JavaScript? Mostre exemplos.">
+        <span class="chat-sugestao-icone">📦</span>
+        <div class="chat-sugestao-texto">
+          <strong>let vs const vs var</strong>
+          <span>Qual a diferença prática e quando usar cada um?</span>
+        </div>
+        <span class="chat-sugestao-seta">→</span>
+      </button>
+
+      <button type="button" class="chat-sugestao-card" data-prompt="Como funciona o método Array.map() em JavaScript? Me mostre um exemplo simples.">
+        <span class="chat-sugestao-icone">⚡</span>
+        <div class="chat-sugestao-texto">
+          <strong>Métodos de Array</strong>
+          <span>Como funciona o Array.map() com exemplos práticos?</span>
+        </div>
+        <span class="chat-sugestao-seta">→</span>
+      </button>
+
+      <button type="button" class="chat-sugestao-card" data-prompt="O que é uma Promise e para que serve o async/await em JavaScript? Explique de forma didática.">
+        <span class="chat-sugestao-icone">⏳</span>
+        <div class="chat-sugestao-texto">
+          <strong>Assincronismo</strong>
+          <span>O que é Promise e para que serve async/await?</span>
+        </div>
+        <span class="chat-sugestao-seta">→</span>
+      </button>
+    </div>
+  `;
+
+  vazio.querySelectorAll('.chat-sugestao-card').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const prompt = btn.dataset.prompt;
+      if (chatInput && prompt) {
+        chatInput.value = prompt;
+        chatForm?.requestSubmit();
+      }
+    });
+  });
+
+  chatMensagens.appendChild(vazio);
+}
+
 
 btnNovaConversa?.addEventListener('click', () => {
   iniciarTelaConversaVazia();
@@ -1402,6 +1475,10 @@ function adicionarMensagem(
   idMensagem,
   avaliacaoAtual
 ) {
+  const estadoVazio = chatMensagens?.querySelector('.chat-estado-vazio');
+  if (estadoVazio) {
+    estadoVazio.remove();
+  }
   const div = document.createElement('div');
 
   div.className = 'msg ' + (

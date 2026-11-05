@@ -5,10 +5,10 @@ if (window.__codehelperProgressoInicializado) {
 
 window.__codehelperProgressoInicializado = true;
 
-if (!document.querySelector('link[href*="quiz-melhorias.css"]')) {
+if (!document.querySelector('link[href*="quiz-melhoria.css"]')) {
   const link = document.createElement('link');
   link.rel = 'stylesheet';
-  link.href = 'quiz-melhorias.css';
+  link.href = 'quiz-melhoria.css';
   document.head.appendChild(link);
 }
 

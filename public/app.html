@@ -3,66 +3,55 @@
 
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="CodeHelper — Plataforma educacional e assistente inteligente para aprendizagem de programação (TCC).">
+  <meta name="theme-color" content="#0d0d10">
 
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
-  >
+  <title>CodeHelper — Assistente de Programação</title>
 
-  <title>
-    CodeHelper — Assistente de Programação
-  </title>
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%234d8afc'/><path d='M10 11L5 16L10 21M22 11L27 16L22 21M18 9L14 23' stroke='white' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round' fill='none'/></svg>">
 
-  <link
-    rel="stylesheet"
-    href="style.css"
-  >
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Oxanium:wght@500;600;700;800&display=swap" rel="stylesheet">
 
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="chat-ui.css">
-
-  <link
-    rel="stylesheet"
-    href="playground.css"
-  >
-
-  <link
-    rel="stylesheet"
-    href="dashboard.css"
-  >
-
-  <link
-    rel="stylesheet"
-    href="analisador.css"
-  >
-
-  <link
-    rel="stylesheet"
-    href="glossario.css"
-  >
-
-  <link
-    rel="stylesheet"
-    href="sobre.css"
-  >
-
-  <link
-    rel="stylesheet"
-    href="scrollbar.css"
-  >
-
-  <link
-    rel="stylesheet"
-    href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/styles/monokai.min.css"
-  >
-
+  <link rel="stylesheet" href="playground.css">
+  <link rel="stylesheet" href="dashboard.css">
+  <link rel="stylesheet" href="analisador.css">
+  <link rel="stylesheet" href="glossario.css">
+  <link rel="stylesheet" href="sobre.css">
+  <link rel="stylesheet" href="scrollbar.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/styles/monokai.min.css">
+  <link rel="stylesheet" href="quiz-melhoria.css">
   <link rel="stylesheet" href="chat-extras.css">
-
   <link rel="stylesheet" href="chat-input-ui.css">
-  
+  <link rel="stylesheet" href="acabamento.css">
+  <link rel="stylesheet" href="interface-ui.css">
 </head>
 
 
 <body>
+
+  <div class="sidebar-backdrop" id="sidebar-backdrop"></div>
+
+  <header class="mobile-topbar" id="mobile-topbar">
+    <button type="button" id="btn-menu-mobile" class="btn-menu-mobile" aria-label="Abrir menu de navegação">
+      <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+    </button>
+    <div class="mobile-brand" id="mobile-brand-btn" role="button" tabindex="0">
+      <span class="mobile-brand-code">CODE</span>
+      <span class="mobile-brand-simbolo">&lt;/&gt;</span>
+      <span class="mobile-brand-helper">HELPER</span>
+    </div>
+    <button type="button" id="btn-nova-conversa-mobile" class="btn-nova-conversa-mobile" aria-label="Nova conversa" title="Nova conversa">
+      <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.2" fill="none" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+    </button>
+  </header>
 
   <div class="app-shell">
 
@@ -248,50 +237,23 @@ if (aprender) {
         <div class="dashboard-estatisticas">
 
           <div class="dashboard-stat">
-
-            <span
-              id="dashboard-total-termos"
-              class="dashboard-stat-numero"
-            >
-              --
-            </span>
-
-            <span class="dashboard-stat-label">
-              termos no glossário
-            </span>
-
+            <span id="dashboard-total-termos" class="dashboard-stat-numero">--</span>
+            <span class="dashboard-stat-label">termos no glossário</span>
           </div>
 
-
           <div class="dashboard-stat">
-
-            <span
-              id="dashboard-total-favoritos"
-              class="dashboard-stat-numero"
-            >
-              --
-            </span>
-
-            <span class="dashboard-stat-label">
-              favoritos
-            </span>
-
+            <span id="dashboard-termos-estudados" class="dashboard-stat-numero">0/45</span>
+            <span class="dashboard-stat-label">termos estudados</span>
           </div>
 
+          <div class="dashboard-stat">
+            <span id="dashboard-total-favoritos" class="dashboard-stat-numero">--</span>
+            <span class="dashboard-stat-label">favoritos</span>
+          </div>
 
           <div class="dashboard-stat">
-
-            <span
-              id="dashboard-total-conversas"
-              class="dashboard-stat-numero"
-            >
-              --
-            </span>
-
-            <span class="dashboard-stat-label">
-              conversas salvas
-            </span>
-
+            <span id="dashboard-total-conversas" class="dashboard-stat-numero">--</span>
+            <span class="dashboard-stat-label">conversas salvas</span>
           </div>
 
         </div>
@@ -1111,9 +1073,8 @@ for (let i = 1; i <= 3; i++) {
       >
 
         <div class="sobre-hero">
-
           <span class="sobre-tag">
-            Projeto acadêmico
+            Trabalho de Conclusão de Curso • Ciência da Computação
           </span>
 
           <h1>
@@ -1121,13 +1082,12 @@ for (let i = 1; i <= 3; i++) {
           </h1>
 
           <p>
-            Uma plataforma educacional criada para ajudar estudantes
-            e iniciantes a aprender programação de forma mais simples,
-            prática e interativa.
+            Plataforma educacional assistida por inteligência artificial desenvolvida como
+            Trabalho de Conclusão de Curso (TCC). Reúne diagnóstico de erros, acervo conceitual
+            estruturado, ambiente de execução interativo (playground) e avaliação formativa contínua
+            para apoiar programadores iniciantes.
           </p>
-
         </div>
-
 
         <div class="sobre-grid">
 

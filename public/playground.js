@@ -433,6 +433,14 @@ btnLimparCodigo.addEventListener('click', limparCodigo);
 btnLimparSaida.addEventListener('click', limparResultado);
 
 playgroundCodigo.addEventListener('keydown', evento => {
+  if (evento.key === 'Tab') {
+    evento.preventDefault();
+    const inicio = playgroundCodigo.selectionStart;
+    const fim = playgroundCodigo.selectionEnd;
+    playgroundCodigo.value = playgroundCodigo.value.substring(0, inicio) + '  ' + playgroundCodigo.value.substring(fim);
+    playgroundCodigo.selectionStart = playgroundCodigo.selectionEnd = inicio + 2;
+    return;
+  }
   if (evento.key === 'Enter' && evento.ctrlKey) {
     evento.preventDefault();
     executarCodigo();

@@ -2,6 +2,7 @@
 require('dotenv').config();
 
 const express = require('express');
+const cors = require('cors');
 const path = require('path');
 const rateLimit = require('express-rate-limit');
 const termos = require('./termos.json');
@@ -11,6 +12,7 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 
+app.use(cors());
 app.use(express.json({ limit: '20mb' }));
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -34,6 +36,16 @@ const limitadorAnalisador = rateLimit({
     res.setHeader('Content-Type', 'text/plain; charset=utf-8');
     res.status(429).end('Você fez muitas análises em pouco tempo. Espera um minuto e tenta novamente.');
   }
+});
+
+app.get('/api/health', (req, res) => {
+  res.json({
+    status: 'ok',
+    app: 'CodeHelper',
+    versao: '1.0.0',
+    geminiConfigurada: Boolean(GEMINI_API_KEY),
+    termosCarregados: Array.isArray(termos) ? termos.length : 0
+  });
 });
 
 app.get('/api/termos', (req, res) => {
@@ -180,16 +192,25 @@ function prepararPartesAnexos(anexos) {
   return partes;
 }
 
+const MODELOS_CANDIDATOS = [
+  process.env.GEMINI_MODEL,
+  'gemini-1.5-flash',
+  'gemini-2.0-flash',
+  'gemini-2.5-flash'
+].filter(Boolean);
+
 async function iniciarStreamGemini({
   contents,
   systemInstruction,
-  tentativa = 1
+  tentativa = 1,
+  indiceModelo = 0
 }) {
   if (!GEMINI_API_KEY) {
     throw new Error('A chave GEMINI_API_KEY não foi configurada no ambiente.');
   }
 
-  const url = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:streamGenerateContent?alt=sse';
+  const modeloAtual = MODELOS_CANDIDATOS[indiceModelo] || 'gemini-1.5-flash';
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/${modeloAtual}:streamGenerateContent?alt=sse`;
 
   const corpo = {
     systemInstruction: {
@@ -197,40 +218,55 @@ async function iniciarStreamGemini({
         text: systemInstruction
       }]
     },
-    contents,
-    generationConfig: {
-      thinkingConfig: {
-        thinkingLevel: 'minimal'
-      }
-    }
+    contents
   };
 
-  const respostaIA = await fetch(url, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'x-goog-api-key': GEMINI_API_KEY
-    },
-    body: JSON.stringify(corpo)
-  });
-
-  if (
-    !respostaIA.ok &&
-    respostaIA.status === 503 &&
-    tentativa < 3
-  ) {
-    console.log(`Gemini sobrecarregada. Tentativa ${tentativa + 1}...`);
-
-    await esperar(700 * tentativa);
-
-    return iniciarStreamGemini({
-      contents,
-      systemInstruction,
-      tentativa: tentativa + 1
+  try {
+    const respostaIA = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-goog-api-key': GEMINI_API_KEY
+      },
+      body: JSON.stringify(corpo)
     });
-  }
 
-  return respostaIA;
+    if (!respostaIA.ok) {
+      if (respostaIA.status === 404 && indiceModelo + 1 < MODELOS_CANDIDATOS.length) {
+        console.warn(`Modelo ${modeloAtual} não disponível (404). Tentando ${MODELOS_CANDIDATOS[indiceModelo + 1]}...`);
+        return iniciarStreamGemini({
+          contents,
+          systemInstruction,
+          tentativa: 1,
+          indiceModelo: indiceModelo + 1
+        });
+      }
+
+      if ((respostaIA.status === 503 || respostaIA.status === 429) && tentativa < 3) {
+        console.log(`Gemini com status ${respostaIA.status}. Tentativa ${tentativa + 1}...`);
+        await esperar(700 * tentativa);
+        return iniciarStreamGemini({
+          contents,
+          systemInstruction,
+          tentativa: tentativa + 1,
+          indiceModelo
+        });
+      }
+    }
+
+    return respostaIA;
+  } catch (erro) {
+    if (indiceModelo + 1 < MODELOS_CANDIDATOS.length) {
+      console.warn(`Erro com modelo ${modeloAtual}. Tentando ${MODELOS_CANDIDATOS[indiceModelo + 1]}...`);
+      return iniciarStreamGemini({
+        contents,
+        systemInstruction,
+        tentativa: 1,
+        indiceModelo: indiceModelo + 1
+      });
+    }
+    throw erro;
+  }
 }
 
 function extrairTextoEvento(evento) {
