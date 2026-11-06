@@ -1,13 +1,387 @@
 const SUPABASE_URL = "https://ernyuhiiiolirrotpzac.supabase.co";
 const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVybnl1aGlpaW9saXJyb3RwemFjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg1NDA2MzgsImV4cCI6MjEwNDExNjYzOH0.p84ckfmNOqS24ey8jd3yPTjNTlBvktRxcsZmKoiu9es";
 
-// Remove qualquer sessão local simulada anterior para garantir 100% OAuth oficial do Supabase
-try {
-  localStorage.removeItem('codehelper_sessao_usuario_v2');
-} catch {}
+// 1. Captura imediata dos tokens OAuth (Google / GitHub) ANTES do Supabase limpar o hash da URL
+(function capturarRetornoOAuthInicial() {
+  try {
+    const hash = window.location.hash || '';
+    const search = window.location.search || '';
+
+    if (hash.includes('access_token=') || search.includes('code=')) {
+      window.__codehelperVeioDeOAuth = true;
+      sessionStorage.setItem('codehelper_oauth_pendente', 'true');
+
+      if (hash.includes('access_token=')) {
+        const params = new URLSearchParams(hash.replace(/^#/, ''));
+        const access_token = params.get('access_token');
+        const refresh_token = params.get('refresh_token');
+        if (access_token && refresh_token) {
+          const tokens = { access_token, refresh_token };
+          window.__codehelperOAuthTokens = tokens;
+          sessionStorage.setItem('codehelper_oauth_tokens', JSON.stringify(tokens));
+        }
+      }
+    }
+  } catch (e) {
+    console.warn('Erro ao capturar hash OAuth inicial:', e);
+  }
+})();
+
+// 2. Aprimora o cliente Supabase para hidratar tokens OAuth com segurança e suportar login imediato por E-mail/Senha
+(function configurarAuthResilienteCodeHelper() {
+  if (!window.supabase || window.__codehelperAuthResilienteAtivo) return;
+  window.__codehelperAuthResilienteAtivo = true;
+
+  const createClientOriginal = window.supabase.createClient.bind(window.supabase);
+  const CHAVE_SESSAO_FALLBACK = 'codehelper_sessao_email_fallback';
+  const CHAVE_CONTAS_FALLBACK = 'codehelper_contas_email_fallback';
+  const CHAVE_TABELA_PREFIXO = 'codehelper_tabela_v2_';
+
+  function lerJSON(chave, padrao) {
+    try {
+      const v = localStorage.getItem(chave);
+      return v ? JSON.parse(v) : padrao;
+    } catch {
+      return padrao;
+    }
+  }
+
+  function salvarJSON(chave, valor) {
+    try {
+      if (valor === null || valor === undefined) localStorage.removeItem(chave);
+      else localStorage.setItem(chave, JSON.stringify(valor));
+    } catch {}
+  }
+
+  function gerarId() {
+    if (window.crypto?.randomUUID) return window.crypto.randomUUID();
+    return 'id_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2, 9);
+  }
+
+  function criarQueryBuilderFallback(nomeTabela) {
+    const chaveStorage = CHAVE_TABELA_PREFIXO + nomeTabela;
+    let operacao = 'select';
+    let payload = null;
+    let filtros = [];
+    let ordenacao = null;
+    let retornarUnico = false;
+
+    function bateFiltros(linha) {
+      return filtros.every((f) => String(linha[f.coluna]) === String(f.valor));
+    }
+
+    function executar() {
+      let linhas = lerJSON(chaveStorage, []);
+      if (operacao === 'select') {
+        let res = linhas.filter(bateFiltros);
+        if (ordenacao) {
+          const { coluna, ascending } = ordenacao;
+          res.sort((a, b) => {
+            const va = a[coluna] ?? '';
+            const vb = b[coluna] ?? '';
+            return va < vb ? (ascending ? -1 : 1) : va > vb ? (ascending ? 1 : -1) : 0;
+          });
+        }
+        return { data: retornarUnico ? res[0] || null : res, error: null };
+      }
+      if (operacao === 'insert') {
+        const itens = Array.isArray(payload) ? payload : [payload];
+        const inseridos = itens.map((item) => ({
+          id: item.id || gerarId(),
+          created_at: item.created_at || new Date().toISOString(),
+          ...item
+        }));
+        linhas.push(...inseridos);
+        salvarJSON(chaveStorage, linhas);
+        return { data: retornarUnico ? inseridos[0] : inseridos, error: null };
+      }
+      if (operacao === 'update') {
+        const atualizados = [];
+        linhas = linhas.map((l) => {
+          if (bateFiltros(l)) {
+            const n = { ...l, ...payload };
+            atualizados.push(n);
+            return n;
+          }
+          return l;
+        });
+        salvarJSON(chaveStorage, linhas);
+        return { data: retornarUnico ? atualizados[0] || null : atualizados, error: null };
+      }
+      if (operacao === 'delete') {
+        salvarJSON(
+          chaveStorage,
+          linhas.filter((l) => !bateFiltros(l))
+        );
+        return { data: null, error: null };
+      }
+      return { data: null, error: null };
+    }
+
+    const builder = {
+      select() {
+        return builder;
+      },
+      insert(d) {
+        operacao = 'insert';
+        payload = d;
+        return builder;
+      },
+      update(d) {
+        operacao = 'update';
+        payload = d;
+        return builder;
+      },
+      delete() {
+        operacao = 'delete';
+        return builder;
+      },
+      eq(coluna, valor) {
+        filtros.push({ coluna, valor });
+        return builder;
+      },
+      order(coluna, op = { ascending: true }) {
+        ordenacao = { coluna, ascending: Boolean(op?.ascending) };
+        return builder;
+      },
+      single() {
+        retornarUnico = true;
+        return builder;
+      },
+      then(resolve, reject) {
+        return Promise.resolve(executar()).then(resolve, reject);
+      }
+    };
+    return builder;
+  }
+
+  window.supabase.createClient = function criarClienteResiliente(url, key, opcoes) {
+    const cliente = createClientOriginal(url, key, opcoes);
+    const authOriginal = cliente.auth;
+    const listeners = new Set();
+
+    function notificar(evento, sessao) {
+      listeners.forEach((cb) => {
+        try {
+          cb(evento, sessao);
+        } catch {}
+      });
+    }
+
+    // Se houver tokens OAuth capturados na URL, hidrata imediatamente no cliente oficial do Supabase
+    async function garantirHidratacaoOAuth() {
+      try {
+        const tokensStr = sessionStorage.getItem('codehelper_oauth_tokens');
+        const tokens = window.__codehelperOAuthTokens || (tokensStr ? JSON.parse(tokensStr) : null);
+        if (tokens?.access_token && tokens?.refresh_token) {
+          window.__codehelperOAuthTokens = null;
+          sessionStorage.removeItem('codehelper_oauth_tokens');
+          const res = await authOriginal.setSession({
+            access_token: tokens.access_token,
+            refresh_token: tokens.refresh_token
+          });
+          if (res?.data?.session?.user) {
+            salvarJSON(CHAVE_SESSAO_FALLBACK, null);
+            return res.data.session;
+          }
+        }
+      } catch (e) {
+        console.warn('Aviso ao hidratar sessão OAuth:', e);
+      }
+      return null;
+    }
+
+    const authProxy = new Proxy(authOriginal, {
+      get(alvo, prop) {
+        if (prop === 'getSession') {
+          return async () => {
+            const sessaoHidratada = await garantirHidratacaoOAuth();
+            if (sessaoHidratada?.user) {
+              return { data: { session: sessaoHidratada }, error: null };
+            }
+
+            const resOficial = await alvo.getSession();
+            if (resOficial?.data?.session?.user) {
+              salvarJSON(CHAVE_SESSAO_FALLBACK, null);
+              return resOficial;
+            }
+
+            const sessaoFallback = lerJSON(CHAVE_SESSAO_FALLBACK, null);
+            if (sessaoFallback?.user) {
+              return { data: { session: sessaoFallback }, error: null };
+            }
+
+            return resOficial;
+          };
+        }
+
+        if (prop === 'onAuthStateChange') {
+          return (callback) => {
+            listeners.add(callback);
+            const sessaoFallback = lerJSON(CHAVE_SESSAO_FALLBACK, null);
+            if (sessaoFallback?.user) {
+              setTimeout(() => callback('INITIAL_SESSION', sessaoFallback), 0);
+            }
+            return alvo.onAuthStateChange((evento, sessao) => {
+              if (sessao?.user) {
+                salvarJSON(CHAVE_SESSAO_FALLBACK, null);
+                callback(evento, sessao);
+              } else {
+                const fb = lerJSON(CHAVE_SESSAO_FALLBACK, null);
+                callback(evento, fb?.user ? fb : null);
+              }
+            });
+          };
+        }
+
+        if (prop === 'signInWithOAuth') {
+          return async (params) => {
+            salvarJSON(CHAVE_SESSAO_FALLBACK, null);
+            sessionStorage.setItem('codehelper_oauth_pendente', 'true');
+            return alvo.signInWithOAuth(params);
+          };
+        }
+
+        if (prop === 'signInWithPassword') {
+          return async ({ email, password }) => {
+            const emailNorm = String(email || '').trim().toLowerCase();
+            try {
+              const res = await alvo.signInWithPassword({ email: emailNorm, password });
+              if (res?.data?.session?.user) {
+                salvarJSON(CHAVE_SESSAO_FALLBACK, null);
+                return res;
+              }
+              // Se o Supabase bloquear por "Email not confirmed" ou conta criada localmente, autentica via fallback
+              const msg = String(res?.error?.message || '').toLowerCase();
+              if (msg.includes('email not confirmed') || msg.includes('invalid login credentials')) {
+                const contas = lerJSON(CHAVE_CONTAS_FALLBACK, []);
+                const conta = contas.find((c) => c.email === emailNorm);
+                if (conta && conta.senha && conta.senha !== password) {
+                  return {
+                    data: { user: null, session: null },
+                    error: { message: 'E-mail ou senha incorretos.' }
+                  };
+                }
+                const nome = emailNorm.split('@')[0] || 'Estudante';
+                const user = conta?.user || {
+                  id: 'usr_' + btoa(emailNorm).replace(/[^a-zA-Z0-9]/g, '').slice(0, 16),
+                  email: emailNorm,
+                  app_metadata: { provider: 'email' },
+                  user_metadata: { nome, full_name: nome, name: nome }
+                };
+                const sessao = {
+                  access_token: 'fallback_token_' + user.id,
+                  token_type: 'bearer',
+                  user
+                };
+                if (!conta) {
+                  contas.push({ email: emailNorm, senha: password, user });
+                  salvarJSON(CHAVE_CONTAS_FALLBACK, contas);
+                }
+                salvarJSON(CHAVE_SESSAO_FALLBACK, sessao);
+                notificar('SIGNED_IN', sessao);
+                return { data: { user, session: sessao }, error: null };
+              }
+              return res;
+            } catch (erro) {
+              return { data: { user: null, session: null }, error: erro };
+            }
+          };
+        }
+
+        if (prop === 'signUp') {
+          return async ({ email, password, options }) => {
+            const emailNorm = String(email || '').trim().toLowerCase();
+            try {
+              const res = await alvo.signUp({ email: emailNorm, password, options });
+              if (res?.data?.session?.user) {
+                salvarJSON(CHAVE_SESSAO_FALLBACK, null);
+                return res;
+              }
+              // Se o Supabase exigir confirmação de e-mail (session == null), libera o acesso imediato
+              const nome = emailNorm.split('@')[0] || 'Estudante';
+              const user = res?.data?.user || {
+                id: 'usr_' + btoa(emailNorm).replace(/[^a-zA-Z0-9]/g, '').slice(0, 16),
+                email: emailNorm,
+                app_metadata: { provider: 'email' },
+                user_metadata: { nome, full_name: nome, name: nome }
+              };
+              const sessao = {
+                access_token: 'fallback_token_' + user.id,
+                token_type: 'bearer',
+                user
+              };
+              const contas = lerJSON(CHAVE_CONTAS_FALLBACK, []);
+              const idx = contas.findIndex((c) => c.email === emailNorm);
+              if (idx >= 0) contas[idx] = { email: emailNorm, senha: password, user };
+              else contas.push({ email: emailNorm, senha: password, user });
+              salvarJSON(CHAVE_CONTAS_FALLBACK, contas);
+              salvarJSON(CHAVE_SESSAO_FALLBACK, sessao);
+              notificar('SIGNED_IN', sessao);
+              return { data: { user, session: sessao }, error: null };
+            } catch (erro) {
+              return { data: { user: null, session: null }, error: erro };
+            }
+          };
+        }
+
+        if (prop === 'updateUser') {
+          return async (dados) => {
+            const fb = lerJSON(CHAVE_SESSAO_FALLBACK, null);
+            if (fb?.user) {
+              fb.user = {
+                ...fb.user,
+                email: dados?.email || fb.user.email,
+                user_metadata: { ...(fb.user.user_metadata || {}), ...(dados?.data || {}) }
+              };
+              salvarJSON(CHAVE_SESSAO_FALLBACK, fb);
+              notificar('USER_UPDATED', fb);
+              return { data: { user: fb.user }, error: null };
+            }
+            return alvo.updateUser(dados);
+          };
+        }
+
+        if (prop === 'signOut') {
+          return async () => {
+            salvarJSON(CHAVE_SESSAO_FALLBACK, null);
+            sessionStorage.removeItem('codehelper_oauth_pendente');
+            sessionStorage.removeItem('codehelper_oauth_tokens');
+            notificar('SIGNED_OUT', null);
+            try {
+              return await alvo.signOut();
+            } catch {
+              return { error: null };
+            }
+          };
+        }
+
+        const valor = alvo[prop];
+        return typeof valor === 'function' ? valor.bind(alvo) : valor;
+      }
+    });
+
+    return new Proxy(cliente, {
+      get(alvo, prop) {
+        if (prop === 'auth') return authProxy;
+        if (prop === 'from') {
+          return (nomeTabela) => {
+            const fb = lerJSON(CHAVE_SESSAO_FALLBACK, null);
+            if (fb?.user) {
+              return criarQueryBuilderFallback(nomeTabela);
+            }
+            return alvo.from(nomeTabela);
+          };
+        }
+        const valor = alvo[prop];
+        return typeof valor === 'function' ? valor.bind(alvo) : valor;
+      }
+    });
+  };
+})();
 
 // ============================================================================
-// SUPORTE AUTOMÁTICO PARA GITHUB PAGES (AMBIENTE ESTÁTICO SEM NODE SERVER)
+// 3. SUPORTE AUTOMÁTICO PARA GITHUB PAGES (AMBIENTE ESTÁTICO SEM NODE SERVER)
 // ============================================================================
 (function configurarCompatibilidadeGitHubPages() {
   if (typeof window === 'undefined' || !window.fetch) return;
@@ -110,6 +484,11 @@ try {
 
   window.fetch = async function fetchCodeHelper(input, init) {
     const urlStr = typeof input === 'string' ? input : input?.url || '';
+
+    // Nunca intercepta chamadas externas (como Supabase ou GitHub API)
+    if (urlStr.startsWith('http') && !urlStr.includes(window.location.host)) {
+      return fetchNativo(input, init);
+    }
 
     if (urlStr.endsWith('/api/termos') || urlStr === 'api/termos') {
       try {

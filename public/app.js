@@ -1985,16 +1985,21 @@ async function iniciar() {
 
     sessao = data?.session || null;
 
-    // Se veio de retorno OAuth (hash ou code na URL) e a sessão ainda está sendo processada, aguarda brevemente
+    // Se veio de retorno OAuth (hash, code ou flag pendente), aguarda a hidratação da sessão
     if (
       !sessao &&
-      (window.location.hash.includes('access_token') ||
+      (Boolean(window.__codehelperVeioDeOAuth) ||
+        sessionStorage.getItem('codehelper_oauth_pendente') === 'true' ||
+        window.location.hash.includes('access_token') ||
         window.location.search.includes('code='))
     ) {
-      await new Promise((resolve) => setTimeout(resolve, 600));
-      const tentativaOAuth = await supabaseClient.auth.getSession();
-      sessao = tentativaOAuth.data?.session || null;
+      for (let tentativa = 0; tentativa < 8 && !sessao; tentativa++) {
+        await new Promise((resolve) => setTimeout(resolve, 250));
+        const tentativaOAuth = await supabaseClient.auth.getSession();
+        sessao = tentativaOAuth.data?.session || null;
+      }
     }
+    sessionStorage.removeItem('codehelper_oauth_pendente');
   } catch (erroSessao) {
     console.error('Erro ao consultar sessão no Supabase:', erroSessao);
   }

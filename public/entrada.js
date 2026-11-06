@@ -929,6 +929,8 @@ if (btnOutraConta) {
 }
 
 const veioDeRetornoOAuth =
+  Boolean(window.__codehelperVeioDeOAuth) ||
+  sessionStorage.getItem('codehelper_oauth_pendente') === 'true' ||
   window.location.hash.includes('access_token') ||
   window.location.search.includes('code=');
 
@@ -946,7 +948,11 @@ async function verificarContaSalva() {
       data?.session?.user;
 
     if (usuario) {
-      if (veioDeRetornoOAuth) {
+      if (
+        veioDeRetornoOAuth ||
+        sessionStorage.getItem('codehelper_oauth_pendente') === 'true'
+      ) {
+        sessionStorage.removeItem('codehelper_oauth_pendente');
         sessionStorage.removeItem('convidado');
         window.location.replace('app.html');
         return;
@@ -966,12 +972,15 @@ async function verificarContaSalva() {
 supabaseClient.auth.onAuthStateChange(
   (evento, sessao) => {
     if (sessao?.user) {
-      if (veioDeRetornoOAuth || evento === 'SIGNED_IN') {
+      if (
+        veioDeRetornoOAuth ||
+        sessionStorage.getItem('codehelper_oauth_pendente') === 'true' ||
+        evento === 'SIGNED_IN'
+      ) {
+        sessionStorage.removeItem('codehelper_oauth_pendente');
         sessionStorage.removeItem('convidado');
-        if (veioDeRetornoOAuth) {
-          window.location.replace('app.html');
-          return;
-        }
+        window.location.replace('app.html');
+        return;
       }
       mostrarContaSalva(sessao.user);
     } else {
