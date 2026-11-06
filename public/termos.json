@@ -1,0 +1,408 @@
+
+[
+  {
+    "name": "if / else",
+    "cat": "controle",
+    "tagLabel": "estrutura de controle",
+    "oneLiner": "Permite que o programa tome decisões com base em condições",
+    "body": "O if verifica se uma condição é verdadeira. Se for, executa o bloco de código dentro dele. O else define o que acontece quando a condição é falsa. Também é possível usar else if para testar outras condições antes de chegar ao else. Essas estruturas permitem que o programa escolha diferentes caminhos durante a execução.",
+    "code": "let idade = 20;\n\nif (idade >= 18) {\n  console.log(\"Acesso liberado\");\n} else {\n  console.log(\"Acesso negado\");\n}",
+    "relacionados": ["switch", "boolean", "for"]
+  },
+  {
+    "name": "for",
+    "cat": "controle",
+    "tagLabel": "estrutura de controle",
+    "oneLiner": "Repete um bloco de código enquanto uma condição for atendida",
+    "body": "O for é uma estrutura de repetição usada principalmente quando sabemos quantas vezes queremos executar um código. Ele possui três partes: a inicialização, a condição de continuidade e a atualização. Normalmente, utilizamos uma variável contadora para controlar as repetições.",
+    "code": "for (let i = 1; i <= 5; i++) {\n  console.log(\"Repetição número \" + i);\n}",
+    "relacionados": ["while", "break", "continue"]
+  },
+  {
+    "name": "while",
+    "cat": "controle",
+    "tagLabel": "estrutura de controle",
+    "oneLiner": "Repete um bloco de código enquanto uma condição for verdadeira",
+    "body": "O while executa repetidamente um bloco de código enquanto sua condição continuar verdadeira. Diferentemente do for, ele não possui uma área própria para inicialização e atualização. Por isso, é importante modificar a condição dentro do bloco para evitar repetições infinitas.",
+    "code": "let energia = 3;\n\nwhile (energia > 0) {\n  console.log(\"Energia: \" + energia);\n  energia--;\n}\n\nconsole.log(\"Energia esgotada\");",
+    "relacionados": ["for", "do-while", "break"]
+  },
+  {
+    "name": "do-while",
+    "cat": "controle",
+    "tagLabel": "estrutura de controle",
+    "oneLiner": "Executa o código pelo menos uma vez antes de verificar a condição",
+    "body": "O do-while é uma estrutura de repetição parecida com o while, mas com uma diferença importante: primeiro executa o bloco de código e somente depois verifica a condição. Isso garante pelo menos uma execução, mesmo que a condição já comece falsa. É útil quando uma ação precisa acontecer antes da primeira verificação.",
+    "code": "let tentativas = 0;\n\ndo {\n  tentativas++;\n  console.log(\"Tentativa \" + tentativas);\n} while (tentativas < 3);",
+    "relacionados": ["while", "for"]
+  },
+  {
+    "name": "switch",
+    "cat": "controle",
+    "tagLabel": "estrutura de controle",
+    "oneLiner": "Compara um valor com diferentes possibilidades",
+    "body": "O switch permite executar diferentes blocos de código dependendo do valor de uma expressão. Cada case representa uma possibilidade. O break encerra o switch depois que uma opção é executada, evitando que os próximos casos também sejam executados. O default funciona como uma alternativa caso nenhum case corresponda ao valor.",
+    "code": "let dia = 2;\n\nswitch (dia) {\n  case 1:\n    console.log(\"Domingo\");\n    break;\n  case 2:\n    console.log(\"Segunda-feira\");\n    break;\n  default:\n    console.log(\"Outro dia\");\n}",
+    "relacionados": ["if / else", "break"]
+  },
+  {
+    "name": "break",
+    "cat": "controle",
+    "tagLabel": "estrutura de controle",
+    "oneLiner": "Interrompe imediatamente um laço de repetição ou switch",
+    "body": "O break encerra imediatamente a estrutura de repetição ou switch em que está inserido. Mesmo que ainda existam repetições ou opções para executar, o programa sai daquela estrutura e continua a partir da próxima instrução depois dela.",
+    "code": "for (let i = 1; i <= 10; i++) {\n  if (i === 5) {\n    break;\n  }\n\n  console.log(i);\n}",
+    "relacionados": ["for", "while", "continue"]
+  },
+  {
+    "name": "continue",
+    "cat": "controle",
+    "tagLabel": "estrutura de controle",
+    "oneLiner": "Pula a repetição atual e continua com a próxima",
+    "body": "O continue interrompe apenas a repetição atual de um laço e passa diretamente para a próxima. Diferentemente do break, ele não encerra o laço inteiro. É útil quando queremos ignorar determinados valores sem interromper todas as repetições.",
+    "code": "for (let i = 1; i <= 5; i++) {\n  if (i === 3) {\n    continue;\n  }\n\n  console.log(i);\n}",
+    "relacionados": ["for", "while", "break"]
+  },
+  {
+    "name": "função",
+    "cat": "funcao",
+    "tagLabel": "função",
+    "oneLiner": "Um bloco de código reutilizável que executa uma tarefa",
+    "body": "Uma função agrupa instruções que realizam uma tarefa específica. Depois de criada, pode ser chamada sempre que necessário, evitando a repetição de código. Ela pode receber informações por meio de parâmetros e devolver um resultado utilizando return. Funções ajudam a organizar programas em partes menores e mais fáceis de manter.",
+    "code": "function somar(a, b) {\n  return a + b;\n}\n\nconst resultado = somar(2, 3);\n\nconsole.log(resultado);",
+    "relacionados": ["parâmetro", "return", "arrow function"]
+  },
+  {
+    "name": "parâmetro",
+    "cat": "funcao",
+    "tagLabel": "função",
+    "oneLiner": "Uma variável que recebe informações para uma função utilizar",
+    "body": "Parâmetros são variáveis declaradas nos parênteses durante a criação de uma função. Eles permitem que a função receba informações diferentes a cada chamada. Quando fornecemos valores ao chamar a função, esses valores são chamados de argumentos.",
+    "code": "function saudacao(nome) {\n  return \"Olá, \" + nome + \"!\";\n}\n\nconsole.log(saudacao(\"Ana\"));\nconsole.log(saudacao(\"Carlos\"));",
+    "relacionados": ["função", "return"]
+  },
+  {
+    "name": "return",
+    "cat": "funcao",
+    "tagLabel": "função",
+    "oneLiner": "Devolve um resultado e encerra a execução da função",
+    "body": "O return é utilizado dentro de uma função para devolver um valor ao local onde ela foi chamada. Quando o programa encontra um return, a execução daquela função é encerrada imediatamente. Uma função sem return explícito devolve undefined.",
+    "code": "function dobro(numero) {\n  return numero * 2;\n}\n\nconst resultado = dobro(4);\n\nconsole.log(resultado);",
+    "relacionados": ["função", "parâmetro"]
+  },
+  {
+    "name": "arrow function",
+    "cat": "funcao",
+    "tagLabel": "função",
+    "oneLiner": "Uma sintaxe moderna e compacta para criar funções",
+    "body": "Arrow function, ou função seta, é uma maneira alternativa de escrever funções em JavaScript utilizando o símbolo =>. Ela permite escrever funções de forma mais curta, especialmente quando possuem apenas uma expressão. Diferentemente das funções tradicionais, arrow functions não possuem seu próprio this.",
+    "code": "const somar = (a, b) => a + b;\n\nconst resultado = somar(2, 3);\n\nconsole.log(resultado);",
+    "relacionados": ["função", "função anônima"]
+  },
+  {
+    "name": "função anônima",
+    "cat": "funcao",
+    "tagLabel": "função",
+    "oneLiner": "Uma função criada sem receber um nome próprio",
+    "body": "Uma função anônima é uma função que não possui um nome declarado. Ela costuma ser armazenada em uma variável ou passada diretamente como argumento para outra função. É bastante utilizada em callbacks e em operações que precisam executar uma tarefa específica.",
+    "code": "const dobro = function (numero) {\n  return numero * 2;\n};\n\nconsole.log(dobro(5));",
+    "relacionados": ["arrow function", "callback"]
+  },
+  {
+    "name": "escopo",
+    "cat": "funcao",
+    "tagLabel": "função",
+    "oneLiner": "Define onde uma variável pode ser acessada no código",
+    "body": "Escopo é a região do programa em que uma variável pode ser utilizada. Variáveis declaradas com let e const possuem escopo de bloco, enquanto var possui escopo de função. Uma variável criada dentro de uma função não pode ser acessada diretamente de fora dela. Entender escopo ajuda a evitar conflitos e erros no código.",
+    "code": "function teste() {\n  let mensagem = \"Olá!\";\n  console.log(mensagem);\n}\n\nteste();\n\nconsole.log(mensagem);",
+    "relacionados": ["closure", "função", "const e let"]
+  },
+  {
+    "name": "variável",
+    "cat": "dados",
+    "tagLabel": "variável",
+    "oneLiner": "Um espaço identificado pelo nome que armazena um valor",
+    "body": "Uma variável permite armazenar informações que podem ser utilizadas durante a execução de um programa. Ela funciona como um espaço identificado por um nome, onde podemos guardar textos, números, valores lógicos e outros tipos de dados. Dependendo da forma como foi declarada, seu valor poderá ser alterado posteriormente.",
+    "code": "let nome = \"Maria\";\nlet idade = 26;\n\nconsole.log(nome);\nconsole.log(idade);\n\nidade = 27;\nconsole.log(idade);",
+    "relacionados": ["const e let", "escopo"]
+  },
+  {
+    "name": "const e let",
+    "cat": "dados",
+    "tagLabel": "variável",
+    "oneLiner": "Duas palavras-chave utilizadas para declarar variáveis",
+    "body": "let e const são formas modernas de declarar variáveis em JavaScript. Utilizamos let quando precisamos permitir que o valor seja reatribuído. Já const impede que a variável receba outro valor depois da declaração. É importante lembrar que const não torna objetos e arrays completamente imutáveis: suas propriedades e elementos ainda podem ser modificados.",
+    "code": "let idade = 20;\nidade = 21;\n\nconst nome = \"Ana\";\n\nconsole.log(idade);\nconsole.log(nome);",
+    "relacionados": ["variável", "imutabilidade"]
+  },
+  {
+    "name": "array",
+    "cat": "dados",
+    "tagLabel": "estrutura de dados",
+    "oneLiner": "Uma lista ordenada que armazena vários valores",
+    "body": "Um array é uma estrutura utilizada para guardar vários valores em uma única variável. Cada elemento ocupa uma posição chamada índice, que começa em zero. Arrays possuem propriedades e métodos próprios, como length, push, map e filter, que facilitam o armazenamento e a manipulação de listas.",
+    "code": "const frutas = [\"maçã\", \"banana\", \"uva\"];\n\nconsole.log(frutas[0]);\nconsole.log(frutas.length);\n\nfrutas.push(\"laranja\");\nconsole.log(frutas);",
+    "relacionados": ["objeto literal", "higher-order function"]
+  },
+  {
+    "name": "string",
+    "cat": "dados",
+    "tagLabel": "tipo de dado",
+    "oneLiner": "Tipo de dado utilizado para representar textos",
+    "body": "String é o tipo de dado utilizado para armazenar textos em JavaScript. Uma string pode conter letras, números, espaços e símbolos. Ela pode ser criada utilizando aspas simples, aspas duplas ou crases. As crases também permitem inserir variáveis e expressões dentro do texto utilizando ${}.",
+    "code": "const nome = \"Maria\";\nconst mensagem = `Olá, ${nome}!`;\n\nconsole.log(mensagem);\nconsole.log(nome.length);",
+    "relacionados": ["number", "boolean"]
+  },
+  {
+    "name": "number",
+    "cat": "dados",
+    "tagLabel": "tipo de dado",
+    "oneLiner": "Tipo de dado utilizado para representar números",
+    "body": "Number é o tipo numérico do JavaScript. Ele representa números inteiros e decimais, sem a necessidade de declarar tipos diferentes para cada um. Também permite realizar operações matemáticas, como soma, subtração, multiplicação e divisão. Valores especiais desse tipo incluem Infinity e NaN.",
+    "code": "const idade = 25;\nconst preco = 19.90;\n\nconst total = preco * 2;\n\nconsole.log(idade);\nconsole.log(total);",
+    "relacionados": ["string", "boolean"]
+  },
+  {
+    "name": "boolean",
+    "cat": "dados",
+    "tagLabel": "tipo de dado",
+    "oneLiner": "Tipo de dado que representa verdadeiro ou falso",
+    "body": "Boolean é um tipo de dado que possui apenas dois valores possíveis: true e false. Ele é muito utilizado em condições, verificações e decisões dentro de um programa. Comparações como idade >= 18 produzem um resultado booleano que pode ser utilizado em estruturas como if e while.",
+    "code": "const usuarioLogado = true;\n\nif (usuarioLogado) {\n  console.log(\"Bem-vindo!\");\n} else {\n  console.log(\"Faça login para continuar.\");\n}",
+    "relacionados": ["if / else", "number"]
+  },
+  {
+    "name": "null e undefined",
+    "cat": "dados",
+    "tagLabel": "tipo de dado",
+    "oneLiner": "Dois valores que representam ausência de informação",
+    "body": "undefined indica que uma variável foi declarada, mas ainda não recebeu um valor, ou que uma propriedade não existe. Já null representa uma ausência de valor definida intencionalmente pelo programador. Embora os dois sejam utilizados para indicar falta de informação, possuem significados diferentes.",
+    "code": "let nome;\nlet usuario = null;\n\nconsole.log(nome);\nconsole.log(usuario);\n\nconsole.log(nome === undefined);\nconsole.log(usuario === null);",
+    "relacionados": ["variável", "boolean"]
+  },
+  {
+    "name": "objeto literal",
+    "cat": "dados",
+    "tagLabel": "estrutura de dados",
+    "oneLiner": "Agrupa informações relacionadas em propriedades e valores",
+    "body": "Um objeto literal é uma estrutura que permite armazenar várias informações relacionadas em uma única variável. Cada informação é organizada em uma propriedade, formada por uma chave e um valor. As propriedades podem ser acessadas utilizando ponto ou colchetes, e também podem armazenar funções, arrays e outros objetos.",
+    "code": "const carro = {\n  marca: \"Fiat\",\n  modelo: \"Argo\",\n  ano: 2020\n};\n\nconsole.log(carro.marca);\nconsole.log(carro[\"ano\"]);",
+    "relacionados": ["JSON", "classe", "array"]
+  },
+  {
+    "name": "JSON",
+    "cat": "dados",
+    "tagLabel": "formato de dados",
+    "oneLiner": "Formato de texto utilizado para armazenar e trocar dados",
+    "body": "JSON significa JavaScript Object Notation. É um formato de texto utilizado para representar informações de maneira organizada e facilitar a comunicação entre sistemas, como um site e um servidor. Apesar de sua sintaxe ser parecida com objetos JavaScript, JSON é um formato independente. Suas propriedades precisam utilizar aspas duplas e não podem conter funções ou comentários.",
+    "code": "{\n  \"nome\": \"Ana\",\n  \"idade\": 25,\n  \"estudante\": true\n}",
+    "relacionados": ["objeto literal", "API"]
+  },
+  {
+    "name": "classe",
+    "cat": "poo",
+    "tagLabel": "orientação a objetos",
+    "oneLiner": "Um modelo utilizado para criar objetos com características e comportamentos",
+    "body": "Uma classe é uma estrutura da programação orientada a objetos que funciona como um modelo para criar objetos. Ela pode definir propriedades, que representam características, e métodos, que representam ações. A partir de uma classe, podemos criar várias instâncias com informações diferentes, mas seguindo a mesma estrutura.",
+    "code": "class Pessoa {\n  constructor(nome) {\n    this.nome = nome;\n  }\n\n  apresentar() {\n    return `Meu nome é ${this.nome}`;\n  }\n}\n\nconst pessoa = new Pessoa(\"Ana\");\nconsole.log(pessoa.apresentar());",
+    "relacionados": ["objeto", "construtor", "herança"]
+  },
+  {
+    "name": "objeto",
+    "cat": "poo",
+    "tagLabel": "orientação a objetos",
+    "oneLiner": "Uma instância que reúne dados e comportamentos",
+    "body": "Na programação orientada a objetos, um objeto é uma instância criada a partir de uma classe. Ele possui características próprias, armazenadas em propriedades, e pode executar ações por meio de métodos. Vários objetos podem ser criados a partir da mesma classe, cada um com seus próprios valores.",
+    "code": "class Pessoa {\n  constructor(nome) {\n    this.nome = nome;\n  }\n}\n\nconst pessoa1 = new Pessoa(\"Carlos\");\nconst pessoa2 = new Pessoa(\"Ana\");\n\nconsole.log(pessoa1.nome);\nconsole.log(pessoa2.nome);",
+    "relacionados": ["classe", "método"]
+  },
+  {
+    "name": "método",
+    "cat": "poo",
+    "tagLabel": "orientação a objetos",
+    "oneLiner": "Uma função associada a um objeto ou classe",
+    "body": "Método é o nome dado a uma função que pertence a um objeto ou classe. Ele representa uma ação que aquela estrutura pode executar. Métodos podem acessar e modificar propriedades do próprio objeto utilizando this, além de receber parâmetros e devolver resultados.",
+    "code": "const cachorro = {\n  nome: \"Rex\",\n  latir() {\n    console.log(`${this.nome} fez au au!`);\n  }\n};\n\ncachorro.latir();",
+    "relacionados": ["objeto", "função", "classe"]
+  },
+  {
+    "name": "construtor",
+    "cat": "poo",
+    "tagLabel": "orientação a objetos",
+    "oneLiner": "Método especial responsável pela inicialização de novos objetos",
+    "body": "O constructor é um método especial de uma classe JavaScript. Ele é executado automaticamente quando um novo objeto é criado utilizando new. Normalmente, é utilizado para receber informações iniciais e definir as propriedades que cada objeto deverá possuir.",
+    "code": "class Pessoa {\n  constructor(nome, idade) {\n    this.nome = nome;\n    this.idade = idade;\n  }\n}\n\nconst pessoa = new Pessoa(\"Carlos\", 25);\n\nconsole.log(pessoa.nome);\nconsole.log(pessoa.idade);",
+    "relacionados": ["classe", "objeto"]
+  },
+  {
+    "name": "herança",
+    "cat": "poo",
+    "tagLabel": "orientação a objetos",
+    "oneLiner": "Permite que uma classe aproveite características e métodos de outra",
+    "body": "Herança é um princípio da programação orientada a objetos que permite criar uma classe baseada em outra. A classe filha pode aproveitar propriedades e métodos da classe pai, além de adicionar novos comportamentos ou modificar os existentes. Em JavaScript, utilizamos extends para indicar a herança e super para acessar o construtor ou métodos da classe pai.",
+    "code": "class Animal {\n  emitirSom() {\n    console.log(\"Som de animal\");\n  }\n}\n\nclass Cachorro extends Animal {\n  latir() {\n    console.log(\"Au au!\");\n  }\n}\n\nconst cachorro = new Cachorro();\ncachorro.emitirSom();\ncachorro.latir();",
+    "relacionados": ["classe", "polimorfismo"]
+  },
+  {
+    "name": "encapsulamento",
+    "cat": "poo",
+    "tagLabel": "orientação a objetos",
+    "oneLiner": "Protege os dados internos e controla como eles podem ser acessados",
+    "body": "Encapsulamento é um princípio da programação orientada a objetos que busca proteger os dados internos de uma estrutura. Em JavaScript, propriedades privadas podem ser declaradas utilizando #. Dessa forma, elas não podem ser acessadas diretamente de fora da classe. Métodos públicos podem controlar como essas informações são consultadas ou modificadas.",
+    "code": "class ContaBancaria {\n  #saldo = 0;\n\n  depositar(valor) {\n    if (valor > 0) {\n      this.#saldo += valor;\n    }\n  }\n\n  consultarSaldo() {\n    return this.#saldo;\n  }\n}\n\nconst conta = new ContaBancaria();\nconta.depositar(100);\n\nconsole.log(conta.consultarSaldo());",
+    "relacionados": ["classe", "interface"]
+  },
+  {
+    "name": "polimorfismo",
+    "cat": "poo",
+    "tagLabel": "orientação a objetos",
+    "oneLiner": "Permite que objetos diferentes respondam à mesma chamada de maneiras diferentes",
+    "body": "Polimorfismo é um princípio da programação orientada a objetos que permite que objetos de classes diferentes utilizem métodos com o mesmo nome, mas apresentem comportamentos próprios. Isso facilita a criação de códigos flexíveis, nos quais podemos trabalhar com diferentes tipos de objetos utilizando uma mesma chamada de método.",
+    "code": "class Animal {\n  emitirSom() {\n    console.log(\"Som genérico\");\n  }\n}\n\nclass Gato extends Animal {\n  emitirSom() {\n    console.log(\"Miau!\");\n  }\n}\n\nclass Cachorro extends Animal {\n  emitirSom() {\n    console.log(\"Au au!\");\n  }\n}\n\nconst animais = [new Gato(), new Cachorro()];\n\nanimais.forEach((animal) => animal.emitirSom());",
+    "relacionados": ["herança", "interface"]
+  },
+  {
+    "name": "interface",
+    "cat": "poo",
+    "tagLabel": "orientação a objetos",
+    "oneLiner": "Define um contrato com as características que uma estrutura deve seguir",
+    "body": "Uma interface descreve um conjunto de propriedades e métodos que uma estrutura deve possuir. Ela funciona como um contrato, estabelecendo quais características precisam estar disponíveis sem determinar necessariamente como serão implementadas. JavaScript não possui interfaces nativas como TypeScript, mas esse conceito é bastante utilizado na orientação a objetos e em linguagens tipadas.",
+    "code": "interface Forma {\n  calcularArea(): number;\n}\n\nclass Quadrado implements Forma {\n  constructor(public lado: number) {}\n\n  calcularArea(): number {\n    return this.lado * this.lado;\n  }\n}\n\nconst quadrado = new Quadrado(5);\nconsole.log(quadrado.calcularArea());",
+    "relacionados": ["classe", "polimorfismo"]
+  },
+  {
+    "name": "recursão",
+    "cat": "avancado",
+    "tagLabel": "avançado",
+    "oneLiner": "Técnica em que uma função chama a si mesma para resolver um problema",
+    "body": "Recursão acontece quando uma função chama a si mesma para resolver um problema em etapas menores. Para funcionar corretamente, precisa existir uma condição de parada, chamada caso base. Sem ela, as chamadas podem continuar indefinidamente até causar um erro de estouro da pilha de execução.",
+    "code": "function fatorial(numero) {\n  if (numero <= 1) {\n    return 1;\n  }\n\n  return numero * fatorial(numero - 1);\n}\n\nconsole.log(fatorial(5));",
+    "relacionados": ["função", "algoritmo"]
+  },
+  {
+    "name": "closure",
+    "cat": "avancado",
+    "tagLabel": "avançado",
+    "oneLiner": "Permite que uma função continue acessando variáveis do ambiente onde foi criada",
+    "body": "Closure é um comportamento do JavaScript em que uma função mantém acesso às variáveis do escopo em que foi criada, mesmo depois que a função externa já terminou de executar. Isso permite preservar informações entre chamadas e criar recursos como contadores privados e funções que guardam configurações.",
+    "code": "function criarContador() {\n  let contagem = 0;\n\n  return function () {\n    contagem++;\n    return contagem;\n  };\n}\n\nconst contar = criarContador();\n\nconsole.log(contar());\nconsole.log(contar());",
+    "relacionados": ["escopo", "função", "callback"]
+  },
+  {
+    "name": "callback",
+    "cat": "avancado",
+    "tagLabel": "avançado",
+    "oneLiner": "Uma função passada para outra função ser executada posteriormente",
+    "body": "Callback é uma função fornecida como argumento para outra função. A função que recebe o callback decide quando executá-lo, podendo fazer isso imediatamente ou depois de alguma operação. Esse recurso é muito utilizado em eventos, temporizadores, processamento de listas e operações assíncronas.",
+    "code": "function processar(valor, callback) {\n  const resultado = valor * 2;\n  callback(resultado);\n}\n\nprocessar(5, (resultado) => {\n  console.log(resultado);\n});",
+    "relacionados": ["função anônima", "promise", "higher-order function"]
+  },
+  {
+    "name": "higher-order function",
+    "cat": "avancado",
+    "tagLabel": "avançado",
+    "oneLiner": "Uma função que recebe outra função ou devolve uma função",
+    "body": "Higher-order function, ou função de ordem superior, é uma função que recebe outra função como argumento ou retorna uma função como resultado. Esse conceito permite criar operações mais flexíveis e reutilizáveis. Métodos de arrays como map, filter e reduce são exemplos muito utilizados no JavaScript.",
+    "code": "const numeros = [1, 2, 3, 4, 5];\n\nconst dobrados = numeros.map((numero) => numero * 2);\nconst pares = numeros.filter((numero) => numero % 2 === 0);\n\nconsole.log(dobrados);\nconsole.log(pares);",
+    "relacionados": ["callback", "array", "função"]
+  },
+  {
+    "name": "promise",
+    "cat": "avancado",
+    "tagLabel": "avançado",
+    "oneLiner": "Representa o resultado futuro de uma operação assíncrona",
+    "body": "Uma Promise representa uma operação que pode terminar no futuro, como buscar informações em um servidor. Ela possui três estados: pending (pendente), fulfilled (concluída com sucesso) e rejected (rejeitada por erro). Podemos utilizar then para tratar o resultado e catch para tratar possíveis erros.",
+    "code": "const promessa = new Promise((resolve, reject) => {\n  const sucesso = true;\n\n  if (sucesso) {\n    resolve(\"Operação concluída!\");\n  } else {\n    reject(new Error(\"A operação falhou.\"));\n  }\n});\n\npromessa\n  .then((resultado) => console.log(resultado))\n  .catch((erro) => console.log(erro.message));",
+    "relacionados": ["async/await", "callback"]
+  },
+  {
+    "name": "async/await",
+    "cat": "avancado",
+    "tagLabel": "avançado",
+    "oneLiner": "Simplifica a escrita e a leitura de operações assíncronas",
+    "body": "async e await são palavras-chave utilizadas para trabalhar com operações assíncronas no JavaScript. A palavra async declara uma função que sempre retorna uma Promise. Já await pausa a execução daquela função até que uma Promise seja resolvida ou rejeitada. Isso permite escrever código assíncrono de maneira mais organizada, sem depender de vários encadeamentos de then.",
+    "code": "async function buscarDados() {\n  try {\n    const resposta = await fetch(\"https://jsonplaceholder.typicode.com/users/1\");\n    const dados = await resposta.json();\n\n    console.log(dados);\n  } catch (erro) {\n    console.log(\"Erro ao buscar dados:\", erro.message);\n  }\n}\n\nbuscarDados();",
+    "relacionados": ["promise", "try/catch"]
+  },
+  {
+    "name": "try/catch",
+    "cat": "avancado",
+    "tagLabel": "avançado",
+    "oneLiner": "Permite capturar e tratar erros durante a execução do código",
+    "body": "try e catch são estruturas utilizadas para lidar com erros. O código que pode gerar uma exceção fica dentro do try. Se um erro acontecer, a execução daquele bloco é interrompida e o catch recebe as informações do erro. Isso permite apresentar mensagens adequadas ou executar outras ações sem deixar a exceção passar sem tratamento.",
+    "code": "try {\n  const dados = JSON.parse(\"texto inválido\");\n  console.log(dados);\n} catch (erro) {\n  console.log(\"Não foi possível interpretar os dados.\");\n  console.log(erro.message);\n}",
+    "relacionados": ["async/await", "API"]
+  },
+  {
+    "name": "API",
+    "cat": "avancado",
+    "tagLabel": "avançado",
+    "oneLiner": "Uma interface que permite a comunicação entre diferentes sistemas",
+    "body": "API significa Application Programming Interface, ou Interface de Programação de Aplicações. Ela define como diferentes programas podem se comunicar e trocar informações. Por exemplo, um site pode utilizar uma API para solicitar dados de um servidor. Uma API pode disponibilizar recursos por meio de endereços chamados endpoints, utilizando métodos HTTP como GET, POST, PUT e DELETE.",
+    "code": "async function buscarUsuario() {\n  const resposta = await fetch(\"https://jsonplaceholder.typicode.com/users/1\");\n  const usuario = await resposta.json();\n\n  console.log(usuario.name);\n}\n\nbuscarUsuario();",
+    "relacionados": ["JSON", "async/await", "promise"]
+  },
+  {
+    "name": "algoritmo",
+    "cat": "avancado",
+    "tagLabel": "avançado",
+    "oneLiner": "Uma sequência organizada de passos para resolver um problema",
+    "body": "Um algoritmo é uma sequência finita e organizada de instruções utilizada para resolver um problema ou realizar uma tarefa. Ele não precisa estar escrito em uma linguagem de programação: pode ser descrito em texto, fluxograma ou pseudocódigo. Um programa é uma forma de implementar algoritmos utilizando uma linguagem que o computador consegue executar.",
+    "code": "function encontrar(lista, valor) {\n  for (let i = 0; i < lista.length; i++) {\n    if (lista[i] === valor) {\n      return i;\n    }\n  }\n\n  return -1;\n}\n\nconst numeros = [10, 20, 30, 40];\n\nconsole.log(encontrar(numeros, 30));",
+    "relacionados": ["complexidade (Big O)", "recursão"]
+  },
+  {
+    "name": "complexidade (Big O)",
+    "cat": "avancado",
+    "tagLabel": "avançado",
+    "oneLiner": "Descreve como o uso de recursos de um algoritmo cresce com os dados",
+    "body": "A notação Big O descreve como o tempo de execução ou o consumo de memória de um algoritmo cresce conforme a quantidade de dados aumenta. Ela ajuda a comparar soluções e entender quais algoritmos tendem a funcionar melhor em grandes volumes de informação. Exemplos comuns são O(1), O(log n), O(n) e O(n²).",
+    "code": "const lista = [10, 20, 30, 40, 50];\n\nfunction mostrarElementos(valores) {\n  for (let i = 0; i < valores.length; i++) {\n    console.log(valores[i]);\n  }\n}\n\nmostrarElementos(lista);",
+    "relacionados": ["algoritmo"]
+  },
+  {
+    "name": "módulo (import/export)",
+    "cat": "avancado",
+    "tagLabel": "avançado",
+    "oneLiner": "Divide o programa em arquivos que podem compartilhar funcionalidades",
+    "body": "Módulos permitem separar um programa em arquivos menores e organizados. Com export, um arquivo disponibiliza funções, variáveis ou classes para outros arquivos. Com import, outro arquivo pode utilizar esses recursos. Essa organização facilita a reutilização de código e a manutenção de projetos maiores.",
+    "code": "export function somar(a, b) {\n  return a + b;\n}\n\nimport { somar } from \"./arquivo.js\";\n\nconsole.log(somar(2, 3));",
+    "relacionados": ["biblioteca", "framework"]
+  },
+  {
+    "name": "framework",
+    "cat": "avancado",
+    "tagLabel": "avançado",
+    "oneLiner": "Uma estrutura de desenvolvimento que oferece ferramentas e padrões para criar aplicações",
+    "body": "Um framework é uma estrutura que fornece ferramentas, recursos e padrões para desenvolver aplicações. Ele orienta a organização do projeto e oferece soluções para tarefas comuns, evitando que o desenvolvedor precise construir tudo do zero. Diferentemente de uma biblioteca, um framework geralmente determina uma estrutura de funcionamento mais definida. Exemplos incluem Express e Angular.",
+    "code": "import express from \"express\";\n\nconst app = express();\n\napp.get(\"/\", (req, res) => {\n  res.send(\"Olá, mundo!\");\n});\n\napp.listen(3000);",
+    "relacionados": ["biblioteca", "módulo (import/export)"]
+  },
+  {
+    "name": "biblioteca",
+    "cat": "avancado",
+    "tagLabel": "avançado",
+    "oneLiner": "Um conjunto de recursos prontos que podem ser utilizados no seu código",
+    "body": "Uma biblioteca é um conjunto de funções, classes e ferramentas desenvolvidas para facilitar determinadas tarefas. Em vez de criar tudo manualmente, o programador pode importar a biblioteca e utilizar seus recursos quando necessário. Diferentemente de um framework, normalmente é o próprio código da aplicação que decide quando chamar as funcionalidades da biblioteca.",
+    "code": "import _ from \"lodash\";\n\nconst numeros = [1, 2, 3, 4, 5];\nconst embaralhados = _.shuffle(numeros);\n\nconsole.log(embaralhados);",
+    "relacionados": ["framework", "módulo (import/export)"]
+  },
+  {
+    "name": "imutabilidade",
+    "cat": "avancado",
+    "tagLabel": "avançado",
+    "oneLiner": "Princípio de evitar modificar diretamente um valor ou estrutura existente",
+    "body": "Imutabilidade é o princípio de não modificar diretamente um dado depois que ele foi criado. Em vez de alterar a estrutura original, criamos uma nova versão com as mudanças desejadas. Isso ajuda a manter o código mais previsível e reduz problemas relacionados a alterações inesperadas. Em JavaScript, const impede a reatribuição de uma variável, mas não torna automaticamente seus objetos ou arrays imutáveis.",
+    "code": "const listaOriginal = [1, 2, 3];\n\nconst novaLista = [...listaOriginal, 4];\n\nconsole.log(listaOriginal);\nconsole.log(novaLista);",
+    "relacionados": ["const e let", "array"]
+  },
+  {
+    "name": "hoisting",
+    "cat": "avancado",
+    "tagLabel": "avançado",
+    "oneLiner": "Comportamento em que declarações são processadas antes da execução do código",
+    "body": "Hoisting é o comportamento do JavaScript em que determinadas declarações são processadas antes da execução do código. Funções declaradas com function podem ser chamadas antes de sua definição no arquivo. Variáveis declaradas com var são inicializadas como undefined até que a atribuição seja executada. Já let e const também passam por hoisting, mas não podem ser acessadas antes da declaração devido à zona temporal morta.",
+    "code": "console.log(saudacao());\n\nfunction saudacao() {\n  return \"Olá!\";\n}\n\nconsole.log(numero);\nvar numero = 10;",
+    "relacionados": ["escopo", "const e let"]
+  }
+]
