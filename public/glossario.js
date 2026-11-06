@@ -45,7 +45,9 @@ function perguntarIASobreTermo(termo) {
   );
 
   if (abaChat) {
+    window.__abrindoConversaSalva = true;
     abaChat.click();
+    setTimeout(() => { window.__abrindoConversaSalva = false; }, 100);
   }
 
   const pergunta = `Explique "${termo.name}" para um iniciante. Explique o que é, para que serve, quando usar e dê um exemplo prático. Se possível, apresente também erros comuns e termos relacionados.`;

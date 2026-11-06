@@ -194,10 +194,12 @@ function prepararPartesAnexos(anexos) {
 
 const MODELOS_CANDIDATOS = [
   process.env.GEMINI_MODEL,
-  'gemini-1.5-flash',
-  'gemini-2.0-flash',
-  'gemini-2.5-flash'
-].filter(Boolean);
+  'gemini-3.6-flash',
+  'gemini-3.5-flash',
+  'gemini-3.5-flash-lite',
+  'gemini-3.1-flash-lite',
+  'gemini-3.8-flash'
+].filter((modelo, idx, arr) => Boolean(modelo) && arr.indexOf(modelo) === idx);
 
 async function iniciarStreamGemini({
   contents,
@@ -209,7 +211,7 @@ async function iniciarStreamGemini({
     throw new Error('A chave GEMINI_API_KEY não foi configurada no ambiente.');
   }
 
-  const modeloAtual = MODELOS_CANDIDATOS[indiceModelo] || 'gemini-1.5-flash';
+  const modeloAtual = MODELOS_CANDIDATOS[indiceModelo] || 'gemini-3.6-flash';
   const url = `https://generativelanguage.googleapis.com/v1beta/models/${modeloAtual}:streamGenerateContent?alt=sse`;
 
   const corpo = {
@@ -232,19 +234,11 @@ async function iniciarStreamGemini({
     });
 
     if (!respostaIA.ok) {
-      if (respostaIA.status === 404 && indiceModelo + 1 < MODELOS_CANDIDATOS.length) {
-        console.warn(`Modelo ${modeloAtual} não disponível (404). Tentando ${MODELOS_CANDIDATOS[indiceModelo + 1]}...`);
-        return iniciarStreamGemini({
-          contents,
-          systemInstruction,
-          tentativa: 1,
-          indiceModelo: indiceModelo + 1
-        });
-      }
+      const textoErro = await respostaIA.text().catch(() => '');
+      console.warn(`[Gemini] Modelo ${modeloAtual} retornou status ${respostaIA.status}.`, textoErro.slice(0, 200));
 
-      if ((respostaIA.status === 503 || respostaIA.status === 429) && tentativa < 3) {
-        console.log(`Gemini com status ${respostaIA.status}. Tentativa ${tentativa + 1}...`);
-        await esperar(700 * tentativa);
+      if ((respostaIA.status === 503 || respostaIA.status === 429) && tentativa < 2) {
+        await esperar(500);
         return iniciarStreamGemini({
           contents,
           systemInstruction,
@@ -252,12 +246,22 @@ async function iniciarStreamGemini({
           indiceModelo
         });
       }
+
+      if (indiceModelo + 1 < MODELOS_CANDIDATOS.length) {
+        console.log(`[Gemini] Alternando automaticamente para ${MODELOS_CANDIDATOS[indiceModelo + 1]}...`);
+        return iniciarStreamGemini({
+          contents,
+          systemInstruction,
+          tentativa: 1,
+          indiceModelo: indiceModelo + 1
+        });
+      }
     }
 
     return respostaIA;
   } catch (erro) {
     if (indiceModelo + 1 < MODELOS_CANDIDATOS.length) {
-      console.warn(`Erro com modelo ${modeloAtual}. Tentando ${MODELOS_CANDIDATOS[indiceModelo + 1]}...`);
+      console.warn(`[Gemini] Erro de rede com ${modeloAtual}. Tentando ${MODELOS_CANDIDATOS[indiceModelo + 1]}...`);
       return iniciarStreamGemini({
         contents,
         systemInstruction,
@@ -385,7 +389,8 @@ app.post('/api/chat', limitadorChat, async (req, res) => {
   const {
     pergunta,
     historico,
-    anexos
+    anexos,
+    modo
   } = corpo;
 
   if (typeof pergunta !== 'string' || !pergunta.trim()) {
@@ -412,7 +417,31 @@ app.post('/api/chat', limitadorChat, async (req, res) => {
     });
   }
 
-  const systemInstruction = `
+  const modoSocratico = modo === 'socratico';
+
+  const systemInstruction = modoSocratico
+    ? `
+Você é o CodeHelper atuando no MODO TUTOR SOCRÁTICO, um mentor pedagógico de programação.
+
+OBJETIVO PEDAGÓGICO:
+Seu papel NÃO é entregar o código pronto de imediato. Seu papel é desenvolver o raciocínio lógico do estudante fazendo perguntas orientadoras, dando pistas progressivas e ajudando-o a construir ou depurar a solução ativamente.
+
+REGRAS DO MODO SOCRÁTICO:
+- Responda em português do Brasil com tom encorajador, didático e acolhedor.
+- NÃO entregue o código final completo de primeira quando o usuário pedir uma solução ou correção de bug.
+- Se o usuário enviar um código com erro:
+  1. Elogie o que já está certo na estrutura.
+  2. Aponte em qual parte ou linha está o comportamento inesperado.
+  3. Faça 1 ou 2 perguntas reflexivas para que o próprio aluno perceba o motivo do erro (ex: "O que acontece com o valor dessa variável na última repetição do loop?").
+- Se o usuário tiver uma dúvida conceitual:
+  1. Explique a ideia central com uma analogia simples.
+  2. Mostre um mini-exemplo enxuto (2 a 4 linhas).
+  3. Termine com uma pequena pergunta prática ou desafio curto para verificar se ele compreendeu.
+- Se o usuário responder à sua pergunta tentando acertar, valide o raciocínio dele, corrija gentilmente se necessário e avance para o próximo passo.
+- Se o usuário pedir explicitamente para ver a resposta final após tentar, mostre a solução comentada passo a passo.
+- Use blocos Markdown com a linguagem identificada sempre que exibir pequenos trechos de exemplo.
+  `.trim()
+    : `
 Você é o CodeHelper, um assistente e tutor de programação para iniciantes.
 
 Sua função é ajudar o usuário a aprender programação, entender códigos, encontrar erros e resolver dúvidas. Quando houver arquivos anexados, analise o conteúdo deles junto com a pergunta do usuário.

@@ -122,7 +122,7 @@
         </svg>
       </span>
       <span>Nova conversa</span>
-      <span class="nova-conversa-atalho">Ctrl K</span>
+      <span class="nova-conversa-atalho">Alt N</span>
     `;
 
     btnNovaConversa.addEventListener('click', () => {
@@ -133,7 +133,7 @@
     });
 
     document.addEventListener('keydown', evento => {
-      if (evento.ctrlKey && evento.key.toLowerCase() === 'k') {
+      if (evento.altKey && evento.key.toLowerCase() === 'n') {
         evento.preventDefault();
         btnNovaConversa.click();
       }
@@ -199,17 +199,25 @@
     botao.addEventListener('click', () => {
       const nome = nomesPaginas[botao.dataset.aba];
       if (nome) document.title = `${nome} — CodeHelper`;
+      if (botao.dataset.aba === 'chat' && !window.__abrindoConversaSalva && typeof iniciarTelaConversaVazia === 'function') {
+        iniciarTelaConversaVazia();
+      }
     });
   });
 
   if (listaConversas) {
     listaConversas.addEventListener('click', evento => {
       if (evento.target.closest('.btn-excluir-conversa')) return;
+      if (evento.target.closest('.conversa-acoes-hover')) return;
 
       const conversa = evento.target.closest('.item-conversa');
       if (!conversa) return;
 
-      setTimeout(() => navegarPara('chat'), 0);
+      window.__abrindoConversaSalva = true;
+      setTimeout(() => {
+        navegarPara('chat');
+        setTimeout(() => { window.__abrindoConversaSalva = false; }, 100);
+      }, 0);
     });
   }
 
@@ -454,29 +462,20 @@
     fecharPopup();
 
     setTimeout(() => {
-      const painel = document.getElementById('painel-config');
-      if (!painel) return;
-
-      if (tipo === 'perfil') {
-        const form = document.getElementById('form-perfil');
-        form?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      } else {
-        painel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      if (typeof window.ativarSubAbaConfig === 'function') {
+        window.ativarSubAbaConfig(tipo);
       }
-    }, 80);
+      const painel = document.getElementById('painel-config');
+      painel?.scrollTo({ top: 0, behavior: 'smooth' });
+    }, 40);
   }
 
   perfilRoot.querySelectorAll('.perfil-menu-item').forEach(botao => {
     botao.addEventListener('click', async () => {
       const acao = botao.dataset.acao;
 
-      if (acao === 'perfil') {
-        abrirConfiguracao('perfil');
-        return;
-      }
-
-      if (acao === 'personalizacao' || acao === 'config') {
-        abrirConfiguracao('geral');
+      if (acao === 'perfil' || acao === 'personalizacao' || acao === 'config') {
+        abrirConfiguracao(acao);
         return;
       }
 

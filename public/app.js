@@ -197,6 +197,51 @@ function destacarCodigo(elemento) {
   });
 }
 
+
+document.querySelectorAll('.aba-btn').forEach((btn) => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.aba-btn').forEach((item) => {
+      item.classList.remove('ativo');
+    });
+
+    document.querySelectorAll('.painel').forEach((painel) => {
+      painel.classList.remove('ativo');
+    });
+
+    btn.classList.add('ativo');
+
+    const painel = document.getElementById(
+      'painel-' + btn.dataset.aba
+    );
+
+    painel?.classList.add('ativo');
+  });
+});
+
+async function carregarTermos() {
+  try {
+    const resposta = await fetch('/api/termos');
+
+    if (!resposta.ok) {
+      throw new Error('Erro ao carregar glossário.');
+    }
+
+    const dados = await resposta.json();
+
+    TERMOS = Array.isArray(dados) ? dados : [];
+
+    renderizar(TERMOS);
+  } catch (erro) {
+    console.error('Erro ao carregar termos:', erro);
+
+    const lista = document.getElementById('lista');
+
+    if (lista) {
+      lista.textContent = 'Não foi possível carregar o glossário.';
+    }
+  }
+}
+
 async function carregarFavoritos() {
   if (!usuarioAtual) return;
 
@@ -960,7 +1005,7 @@ document.addEventListener('keydown', (evento) => {
 
 window.addEventListener('resize', fecharMenuAnexo);
 
-async function carregarConversas(selecionarPrimeira = true) {
+async function carregarConversas(selecionarPrimeira = false) {
   if (!usuarioAtual || !listaConversas) return;
 
   const { data, error } = await supabaseClient
@@ -1168,9 +1213,14 @@ async function selecionarConversa(id) {
 async function excluirConversa(id) {
   if (!usuarioAtual) return;
 
-  const confirmar = confirm(
-    'Excluir esta conversa e todo o seu histórico?'
-  );
+  const confirmar = typeof window.confirmarCodeHelper === 'function'
+    ? await window.confirmarCodeHelper({
+        titulo: 'Excluir conversa?',
+        mensagem: 'Esta conversa e todas as mensagens dela serão removidas permanentemente da sua conta.',
+        textoConfirmar: 'Excluir conversa',
+        perigo: true
+      })
+    : confirm('Excluir esta conversa e todo o seu histórico?');
 
   if (!confirmar) return;
 
@@ -1191,7 +1241,7 @@ async function excluirConversa(id) {
     iniciarTelaConversaVazia();
   }
 
-  await carregarConversas(eraAtual);
+  await carregarConversas(false);
 }
 
 function gerarTituloConversa(pergunta) {
@@ -1598,7 +1648,8 @@ async function enviarPergunta(pergunta, arquivosParaEnviar = []) {
       body: JSON.stringify({
         pergunta,
         historico: historicoParaIA,
-        anexos: anexosPayload
+        anexos: anexosPayload,
+        modo: window.modoChatCodeHelper || 'direto'
       })
     });
 
@@ -1853,7 +1904,7 @@ function preencherPerfil() {
   }
 
   if (perfilNome) {
-    perfilNome.value = usuarioAtual.user_metadata?.nome || '';
+    perfilNome.value = usuarioAtual.user_metadata?.nome || usuarioAtual.user_metadata?.full_name || usuarioAtual.user_metadata?.name || '';
   }
 }
 
@@ -1888,9 +1939,14 @@ const btnApagarHistorico = document.getElementById('btn-apagar-historico');
 btnApagarHistorico?.addEventListener('click', async () => {
   if (!usuarioAtual) return;
 
-  const confirmar = confirm(
-    'Tem certeza que quer apagar TODAS as suas conversas e o histórico? Essa ação não pode ser desfeita.'
-  );
+  const confirmar = typeof window.confirmarCodeHelper === 'function'
+    ? await window.confirmarCodeHelper({
+        titulo: 'Apagar todo o histórico?',
+        mensagem: 'Tem certeza que deseja apagar TODAS as suas conversas salvas? Essa ação não pode ser desfeita.',
+        textoConfirmar: 'Sim, apagar tudo',
+        perigo: true
+      })
+    : confirm('Tem certeza que quer apagar TODAS as suas conversas e o histórico? Essa ação não pode ser desfeita.');
 
   if (!confirmar) return;
 
@@ -1918,44 +1974,74 @@ btnApagarHistorico?.addEventListener('click', async () => {
 async function iniciar() {
   iniciarTema();
 
+  let sessao = null;
+
   try {
     const { data, error } = await supabaseClient.auth.getSession();
 
     if (error) {
-      throw error;
+      console.warn('Aviso ao verificar sessão inicial:', error);
     }
 
-    if (data.session) {
-      usuarioAtual = data.session.user;
-    } else if (sessionStorage.getItem('convidado') === 'true') {
-      modoConvidado = true;
+    sessao = data?.session || null;
 
-      if (secaoConversas) {
-        secaoConversas.style.display = 'none';
-      }
-    } else {
-      window.location.href = 'index.html';
-      return;
+    // Se veio de retorno OAuth (hash ou code na URL) e a sessão ainda está sendo processada, aguarda brevemente
+    if (
+      !sessao &&
+      (window.location.hash.includes('access_token') ||
+        window.location.search.includes('code='))
+    ) {
+      await new Promise((resolve) => setTimeout(resolve, 600));
+      const tentativaOAuth = await supabaseClient.auth.getSession();
+      sessao = tentativaOAuth.data?.session || null;
     }
+  } catch (erroSessao) {
+    console.error('Erro ao consultar sessão no Supabase:', erroSessao);
+  }
 
+  if (sessao?.user) {
+    usuarioAtual = sessao.user;
+    modoConvidado = false;
+  } else if (sessionStorage.getItem('convidado') === 'true') {
+    modoConvidado = true;
+
+    if (secaoConversas) {
+      secaoConversas.style.display = 'none';
+    }
+  } else {
+    window.location.href = 'index.html';
+    return;
+  }
+
+  try {
     renderAuthArea();
+  } catch (e) {
+    console.error('Erro ao renderizar área de autenticação:', e);
+  }
 
+  try {
     if (usuarioAtual) {
       await carregarFavoritos();
-      await carregarConversas();
+      await carregarConversas(false);
+      iniciarTelaConversaVazia();
     } else {
       iniciarTelaConversaVazia();
     }
+  } catch (e) {
+    console.error('Erro ao carregar dados do usuário:', e);
+    iniciarTelaConversaVazia();
+  }
 
+  try {
     await carregarTermos();
+  } catch (e) {
+    console.error('Erro ao carregar termos:', e);
+  }
 
+  try {
     preencherPerfil();
-  } catch (erro) {
-    console.error('Erro ao iniciar o CodeHelper:', erro);
-
-    alert('Não foi possível carregar sua sessão. Entre novamente.');
-
-    window.location.href = 'index.html';
+  } catch (e) {
+    console.error('Erro ao preencher perfil:', e);
   }
 }
 

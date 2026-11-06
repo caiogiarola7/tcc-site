@@ -4,27 +4,34 @@
 }
 
 :root {
-  --cor-fundo: #09090b;
-  --cor-fundo-alt: #121217;
-  --cor-fundo-alt2: #181820;
-  --cor-texto: #f4f4f5;
-  --cor-texto-dim: #9494a3;
-  --cor-borda: rgba(255, 255, 255, 0.08);
-  --cor-borda-forte: rgba(255, 255, 255, 0.16);
-  --cor-destaque: #6366f1;
-  --cor-destaque-hover: #4f46e5;
-  --cor-msg-ia: #14141a;
-  --cor-msg-usuario: #4f46e5;
-  --cor-perigo: #f87171;
-  --cor-favorito: #fbbf24;
-  --cor-positiva: #34d399;
+  --cor-fundo: #07080c;
+  --cor-fundo-alt: rgba(28, 30, 38, 0.58);
+  --cor-fundo-alt2: rgba(44, 47, 58, 0.52);
+  --cor-texto: #ffffff;
+  --cor-texto-dim: rgba(235, 235, 245, 0.70);
+  --cor-borda: rgba(255, 255, 255, 0.13);
+  --cor-borda-forte: rgba(255, 255, 255, 0.24);
+  --cor-destaque: #cbd5e1;
+  --cor-destaque-hover: #f1f5f9;
+  --cor-texto-sobre-destaque: #07080c;
+  --cor-destaque-rgb: 203, 213, 225;
+  --cor-orb2-rgb: 148, 163, 184;
+  --cor-msg-ia: rgba(30, 32, 42, 0.62);
+  --cor-msg-usuario: var(--cor-destaque);
+  --cor-perigo: #ff453a;
+  --cor-favorito: #ffd60a;
+  --cor-positiva: #30d158;
 
-  --gradiente: linear-gradient(
-    135deg,
-    #6366f1 0%,
-    #8b5cf6 50%,
-    #ec4899 100%
-  );
+  --gradiente: var(--cor-destaque);
+  --bg: var(--cor-fundo);
+  --bg2: var(--cor-fundo-alt);
+  --bg3: var(--cor-fundo-alt2);
+  --texto: var(--cor-texto);
+  --fraco: var(--cor-texto-dim);
+  --borda: var(--cor-borda-forte);
+  --roxo: var(--cor-destaque);
+  --roxo-claro: #f8fafc;
+  --accent-color: var(--cor-destaque);
 }
 
 body.tema-claro {
@@ -37,18 +44,23 @@ body.tema-claro {
   --cor-borda-forte: #cbd5e1;
   --cor-destaque: #4f46e5;
   --cor-destaque-hover: #4338ca;
+  --cor-texto-sobre-destaque: #ffffff;
   --cor-msg-ia: #f1f5f9;
   --cor-msg-usuario: #4f46e5;
   --cor-perigo: #ef4444;
   --cor-favorito: #d97706;
   --cor-positiva: #10b981;
 
-  --gradiente: linear-gradient(
-    135deg,
-    #4f46e5 0%,
-    #7c3aed 50%,
-    #db2777 100%
-  );
+  --gradiente: #4f46e5;
+  --bg: var(--cor-fundo);
+  --bg2: var(--cor-fundo-alt);
+  --bg3: var(--cor-fundo-alt2);
+  --texto: var(--cor-texto);
+  --fraco: var(--cor-texto-dim);
+  --borda: var(--cor-borda-forte);
+  --roxo: var(--cor-destaque);
+  --roxo-claro: #6366f1;
+  --accent-color: #4f46e5;
 }
 
 html,
@@ -688,7 +700,7 @@ button:disabled {
   border-color: var(--cor-destaque);
   box-shadow:
     0 0 0 2px
-    rgba(77, 138, 252, 0.1);
+    rgba(255, 208, 0, 0.22);
 }
 
 .chat-form textarea {
@@ -801,7 +813,7 @@ button:disabled {
 
 #btn-filtro-favoritos.ativo {
   background: var(--cor-favorito);
-  color: #1c1c20;
+  color: #050505;
   border-color: var(--cor-favorito);
 }
 
