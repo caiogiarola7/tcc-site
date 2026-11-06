@@ -1,4 +1,3 @@
-
 const supabaseClient =
   window.supabase.createClient(
     SUPABASE_URL,
@@ -6,6 +5,30 @@ const supabaseClient =
   );
 
 let modoCadastro = false;
+
+// Sincroniza a cor de destaque escolhida no App (se houver)
+(function aplicarTemaSalvoLogin() {
+  const PALETAS = {
+    prata: { cor: '#38bdf8', claro: '#e0f2fe', rgb: '56, 189, 248', orb2: '99, 102, 241' },
+    azul: { cor: '#3b82f6', claro: '#dbeafe', rgb: '59, 130, 246', orb2: '6, 182, 212' },
+    roxo: { cor: '#a855f7', claro: '#f3e8ff', rgb: '168, 85, 247', orb2: '99, 102, 241' },
+    esmeralda: { cor: '#10b981', claro: '#d1fae5', rgb: '16, 185, 129', orb2: '20, 184, 166' },
+    ambar: { cor: '#f59e0b', claro: '#fef3c7', rgb: '245, 158, 11', orb2: '249, 115, 22' },
+    rosa: { cor: '#ec4899', claro: '#fce7f3', rgb: '236, 72, 153', orb2: '168, 85, 247' },
+    carmesim: { cor: '#f43f5e', claro: '#ffe4e6', rgb: '244, 63, 94', orb2: '239, 68, 68' }
+  };
+  try {
+    const salvo = localStorage.getItem('codehelper_cor_destaque');
+    const p = PALETAS[salvo] || PALETAS.prata;
+    const root = document.documentElement;
+    root.style.setProperty('--destaque', p.cor);
+    root.style.setProperty('--destaque-claro', p.claro);
+    root.style.setProperty('--cor-destaque-rgb', p.rgb);
+    root.style.setProperty('--cor-orb2-rgb', p.orb2);
+  } catch (e) {
+    // Fallback silencioso
+  }
+})();
 
 const formEntrada =
   document.getElementById('form-entrada');
@@ -36,6 +59,9 @@ const inputEmail =
 
 const inputSenha =
   document.getElementById('input-senha');
+
+const btnMostrarSenha =
+  document.getElementById('btn-mostrar-senha');
 
 const contaSalva =
   document.getElementById('conta-salva');
@@ -75,6 +101,26 @@ const previewCodigo =
 
 const previewExplicacao =
   document.getElementById('preview-explicacao');
+
+const previewContador =
+  document.getElementById('preview-contador');
+
+const previewProgressoFill =
+  document.getElementById('preview-progresso-fill');
+
+const btnPreviewAnt =
+  document.getElementById('btn-preview-ant');
+
+const btnPreviewProx =
+  document.getElementById('btn-preview-prox');
+
+if (btnMostrarSenha && inputSenha) {
+  btnMostrarSenha.addEventListener('click', () => {
+    const visivel = inputSenha.type === 'text';
+    inputSenha.type = visivel ? 'password' : 'text';
+    btnMostrarSenha.style.color = visivel ? '' : '#ffffff';
+  });
+}
 
 const previewsEntrada = [
   {
@@ -243,24 +289,49 @@ console.log(dobro(5));`,
   }
 ];
 
-function obterRedirectApp() {
-  return new URL(
-    'app.html',
-    window.location.href
-  ).href;
+function escaparHTML(str) {
+  return str
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
 }
 
-function definirErro(mensagem = '') {
-  entradaErro.textContent = mensagem;
+function realcarSintaxePreview(codigo) {
+  const tokens = [];
+  const salvar = (html) => {
+    const id = `@@TOK_${tokens.length}@@`;
+    tokens.push(html);
+    return id;
+  };
+
+  let texto = escaparHTML(codigo);
+
+  // Comentários
+  texto = texto.replace(/(\/\/[^\n]*)/g, (m) => salvar(`<span class="tok-cm">${m}</span>`));
+  // Strings
+  texto = texto.replace(/(".*?"|'.*?')/g, (m) => salvar(`<span class="tok-str">${m}</span>`));
+  // Palavras-chave JS
+  texto = texto.replace(
+    /\b(let|const|var|function|return|if|else|while|for|async|await|try|catch|class|constructor|new|this|null|undefined|true|false)\b/g,
+    (m) => salvar(`<span class="tok-kw">${m}</span>`)
+  );
+  // Funções e métodos
+  texto = texto.replace(
+    /\b(console|log|push|map|forEach|fetch|json|JSON|parse)\b/g,
+    (m) => salvar(`<span class="tok-fn">${m}</span>`)
+  );
+  // Números
+  texto = texto.replace(/\b(\d+)\b/g, (m) => salvar(`<span class="tok-num">${m}</span>`));
+
+  return texto.replace(/@@TOK_(\d+)@@/g, (_, idx) => tokens[Number(idx)]);
 }
 
-function definirCarregandoSocial(carregando) {
-  btnGoogle.disabled = carregando;
-  btnGithub.disabled = carregando;
-  btnEntrar.disabled = carregando;
-}
+let indicePreviewAtual = Math.floor(Math.random() * previewsEntrada.length);
+let previewPausado = false;
+let progressoPreview = 0;
+const DURACAO_CICLO_MS = 5800;
 
-function aplicarPreviewAleatoria() {
+function mostrarPreviewPorIndice(indice) {
   if (
     !previewPerguntaTexto ||
     !previewRespostaTexto ||
@@ -270,27 +341,28 @@ function aplicarPreviewAleatoria() {
     return;
   }
 
-  const indice =
-    Math.floor(
-      Math.random() * previewsEntrada.length
-    );
+  indicePreviewAtual = (indice + previewsEntrada.length) % previewsEntrada.length;
+  const preview = previewsEntrada[indicePreviewAtual];
 
-  const preview =
-    previewsEntrada[indice];
+  previewPerguntaTexto.textContent = preview.pergunta;
+  previewRespostaTexto.textContent = preview.resposta;
+  previewCodigo.innerHTML = realcarSintaxePreview(preview.codigo);
+  previewExplicacao.innerHTML = preview.explicacao;
 
-  previewPerguntaTexto.textContent =
-    preview.pergunta;
+  if (previewContador) {
+    previewContador.textContent = `${indicePreviewAtual + 1} / ${previewsEntrada.length}`;
+  }
 
-  previewRespostaTexto.textContent =
-    preview.resposta;
-
-  previewCodigo.textContent =
-    preview.codigo;
-
-  previewExplicacao.innerHTML =
-    preview.explicacao;
+  progressoPreview = 0;
+  if (previewProgressoFill) {
+    previewProgressoFill.style.width = '0%';
+  }
 
   animarPreview();
+}
+
+function aplicarPreviewAleatoria() {
+  mostrarPreviewPorIndice(indicePreviewAtual);
 }
 
 function animarPreview() {
@@ -309,8 +381,8 @@ function animarPreview() {
   previewCard.animate(
     [
       {
-        opacity: 0,
-        transform: 'translateY(10px) scale(0.99)'
+        opacity: 0.35,
+        transform: 'translateY(8px) scale(0.992)'
       },
       {
         opacity: 1,
@@ -318,11 +390,287 @@ function animarPreview() {
       }
     ],
     {
-      duration: 480,
+      duration: 420,
       easing: 'cubic-bezier(0.22, 1, 0.36, 1)',
       fill: 'both'
     }
   );
+}
+
+if (btnPreviewAnt) {
+  btnPreviewAnt.addEventListener('click', () => {
+    mostrarPreviewPorIndice(indicePreviewAtual - 1);
+  });
+}
+
+if (btnPreviewProx) {
+  btnPreviewProx.addEventListener('click', () => {
+    mostrarPreviewPorIndice(indicePreviewAtual + 1);
+  });
+}
+
+if (previewCard) {
+  previewCard.addEventListener('mouseenter', () => {
+    previewPausado = true;
+  });
+  previewCard.addEventListener('mouseleave', () => {
+    previewPausado = false;
+  });
+}
+
+setInterval(() => {
+  if (previewPausado) return;
+  progressoPreview += 100 / (DURACAO_CICLO_MS / 100);
+  if (previewProgressoFill) {
+    previewProgressoFill.style.width = `${Math.min(100, progressoPreview)}%`;
+  }
+  if (progressoPreview >= 100) {
+    mostrarPreviewPorIndice(indicePreviewAtual + 1);
+  }
+}, 100);
+
+// ==========================================================================
+// ANIMAÇÃO DE FUNDO DE ALTA INTENSIDADE (CANVAS NEURAL AST & DEV STREAM)
+// ==========================================================================
+(function iniciarDevCinemaCanvas() {
+  const canvas = document.getElementById('dev-cinema-canvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  if (!ctx) return;
+
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    return;
+  }
+
+  let largura = (canvas.width = window.innerWidth);
+  let altura = (canvas.height = window.innerHeight);
+
+  window.addEventListener('resize', () => {
+    largura = canvas.width = window.innerWidth;
+    altura = canvas.height = window.innerHeight;
+  });
+
+  const LABELS_DEV = [
+    '</> CodeHelper',
+    'AI Tutor',
+    'AST Parser',
+    'JS Engine',
+    'async / await',
+    'Array.map()',
+    'Quiz 80+',
+    'Debug IA',
+    'JSON.parse()',
+    'DOM Tree',
+    'Promise.all',
+    'try / catch',
+    'Clean Code',
+    'Complexidade O(1)',
+    'Playground JS',
+    'Tutor Socrático',
+    'Closures',
+    'Fetch API',
+    'Event Loop',
+    ' Escopo Léxico'
+  ];
+
+  const qtdNos = 22;
+  const nos = [];
+  for (let i = 0; i < qtdNos; i++) {
+    nos.push({
+      x: largura * 0.28 + Math.random() * (largura * 0.70),
+      y: Math.random() * altura,
+      vx: (Math.random() - 0.5) * 0.65,
+      vy: (Math.random() - 0.5) * 0.65,
+      raio: 2.6 + Math.random() * 2.4,
+      label: LABELS_DEV[i % LABELS_DEV.length],
+      mostrarLabel: i < 12,
+      pulso: Math.random() * Math.PI * 2
+    });
+  }
+
+  // Pacotes de dados (pulsos luminosos) viajando entre nós
+  const pacotes = [];
+  function criarPacote(origem, destino) {
+    pacotes.push({
+      origem,
+      destino,
+      progresso: 0,
+      velocidade: 0.014 + Math.random() * 0.018,
+      cor: Math.random() > 0.35 ? '56, 189, 248' : '52, 211, 153'
+    });
+  }
+
+  // Trilhas verticais de código (Code Matrix / Data Streams)
+  const trilhas = [];
+  const SNIPPETS_TRILHA = [
+    '010110',
+    'const x = 42;',
+    '=> true',
+    'await ai()',
+    '✓ OK',
+    'return res;',
+    'if (valid)',
+    'node.ast',
+    '{ ...obj }'
+  ];
+  for (let i = 0; i < 16; i++) {
+    trilhas.push({
+      x: largura * 0.32 + Math.random() * (largura * 0.66),
+      y: Math.random() * altura,
+      vy: 0.7 + Math.random() * 1.1,
+      comprimento: 70 + Math.random() * 110,
+      texto: SNIPPETS_TRILHA[i % SNIPPETS_TRILHA.length],
+      opacidade: 0.12 + Math.random() * 0.18
+    });
+  }
+
+  let mouse = { x: largura * 0.68, y: altura * 0.5, ativo: false };
+  window.addEventListener('mousemove', (e) => {
+    mouse.x = e.clientX;
+    mouse.y = e.clientY;
+    mouse.ativo = true;
+  });
+
+  function desenhar() {
+    ctx.clearRect(0, 0, largura, altura);
+
+    // 1. Desenha as trilhas verticais de telemetria / código
+    ctx.font = '600 10.5px "JetBrains Mono", monospace';
+    for (const t of trilhas) {
+      t.y += t.vy;
+      if (t.y - t.comprimento > altura) {
+        t.y = -30;
+        t.x = largura * 0.32 + Math.random() * (largura * 0.66);
+      }
+
+      const grad = ctx.createLinearGradient(t.x, t.y - t.comprimento, t.x, t.y);
+      grad.addColorStop(0, 'rgba(56, 189, 248, 0)');
+      grad.addColorStop(1, `rgba(56, 189, 248, ${t.opacidade})`);
+      ctx.strokeStyle = grad;
+      ctx.lineWidth = 1.2;
+      ctx.beginPath();
+      ctx.moveTo(t.x, t.y - t.comprimento);
+      ctx.lineTo(t.x, t.y);
+      ctx.stroke();
+
+      ctx.fillStyle = `rgba(224, 242, 254, ${t.opacidade * 1.3})`;
+      ctx.fillText(t.texto, t.x + 5, t.y);
+    }
+
+    // 2. Atualiza e conecta os nós da rede AST / IA
+    const distMax = 210;
+    for (let i = 0; i < nos.length; i++) {
+      const a = nos[i];
+      a.x += a.vx;
+      a.y += a.vy;
+      a.pulso += 0.035;
+
+      const limiteEsq = largura > 860 ? largura * 0.26 : 20;
+      if (a.x < limiteEsq || a.x > largura - 20) a.vx *= -1;
+      if (a.y < 20 || a.y > altura - 20) a.vy *= -1;
+
+      if (mouse.ativo) {
+        const dxm = mouse.x - a.x;
+        const dym = mouse.y - a.y;
+        const dm = Math.hypot(dxm, dym);
+        if (dm < 220 && dm > 10) {
+          a.x += (dxm / dm) * 0.35;
+          a.y += (dym / dm) * 0.35;
+        }
+      }
+
+      for (let j = i + 1; j < nos.length; j++) {
+        const b = nos[j];
+        const dx = b.x - a.x;
+        const dy = b.y - a.y;
+        const dist = Math.hypot(dx, dy);
+
+        if (dist < distMax) {
+          const alfa = (1 - dist / distMax) * 0.32;
+          ctx.strokeStyle = `rgba(125, 211, 252, ${alfa})`;
+          ctx.lineWidth = 1;
+          ctx.beginPath();
+          ctx.moveTo(a.x, a.y);
+          ctx.lineTo(b.x, b.y);
+          ctx.stroke();
+
+          if (pacotes.length < 18 && Math.random() < 0.0022) {
+            criarPacote(a, b);
+          }
+        }
+      }
+    }
+
+    // 3. Desenha os pacotes de dados (pulsos laser) viajando nas conexões
+    for (let i = pacotes.length - 1; i >= 0; i--) {
+      const p = pacotes[i];
+      p.progresso += p.velocidade;
+      if (p.progresso >= 1) {
+        pacotes.splice(i, 1);
+        continue;
+      }
+
+      const px = p.origem.x + (p.destino.x - p.origem.x) * p.progresso;
+      const py = p.origem.y + (p.destino.y - p.origem.y) * p.progresso;
+
+      const brilho = ctx.createRadialGradient(px, py, 0, px, py, 12);
+      brilho.addColorStop(0, `rgba(${p.cor}, 0.95)`);
+      brilho.addColorStop(1, `rgba(${p.cor}, 0)`);
+      ctx.fillStyle = brilho;
+      ctx.beginPath();
+      ctx.arc(px, py, 12, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.fillStyle = '#ffffff';
+      ctx.beginPath();
+      ctx.arc(px, py, 2.4, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    // 4. Desenha os nós e rótulos Dev
+    ctx.font = '600 11px "JetBrains Mono", monospace';
+    for (const n of nos) {
+      const escalaPulso = 1 + Math.sin(n.pulso) * 0.25;
+      const halo = ctx.createRadialGradient(n.x, n.y, 0, n.x, n.y, n.raio * 5 * escalaPulso);
+      halo.addColorStop(0, 'rgba(56, 189, 248, 0.55)');
+      halo.addColorStop(1, 'rgba(56, 189, 248, 0)');
+      ctx.fillStyle = halo;
+      ctx.beginPath();
+      ctx.arc(n.x, n.y, n.raio * 5 * escalaPulso, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.fillStyle = '#e0f2fe';
+      ctx.beginPath();
+      ctx.arc(n.x, n.y, n.raio, 0, Math.PI * 2);
+      ctx.fill();
+
+      if (n.mostrarLabel) {
+        ctx.fillStyle = 'rgba(224, 242, 254, 0.42)';
+        ctx.fillText(n.label, n.x + 8, n.y + 3);
+      }
+    }
+
+    requestAnimationFrame(desenhar);
+  }
+
+  requestAnimationFrame(desenhar);
+})();
+
+function obterRedirectApp() {
+  return new URL(
+    'app.html',
+    window.location.href
+  ).href;
+}
+
+function definirErro(mensagem = '') {
+  entradaErro.textContent = mensagem;
+}
+
+function definirCarregandoSocial(carregando) {
+  btnGoogle.disabled = carregando;
+  btnGithub.disabled = carregando;
+  btnEntrar.disabled = carregando;
 }
 
 btnToggle.addEventListener('click', () => {
@@ -580,6 +928,10 @@ if (btnOutraConta) {
   });
 }
 
+const veioDeRetornoOAuth =
+  window.location.hash.includes('access_token') ||
+  window.location.search.includes('code=');
+
 async function verificarContaSalva() {
   try {
     const { data, error } =
@@ -594,6 +946,11 @@ async function verificarContaSalva() {
       data?.session?.user;
 
     if (usuario) {
+      if (veioDeRetornoOAuth) {
+        sessionStorage.removeItem('convidado');
+        window.location.replace('app.html');
+        return;
+      }
       mostrarContaSalva(usuario);
     } else {
       esconderContaSalva();
@@ -609,6 +966,13 @@ async function verificarContaSalva() {
 supabaseClient.auth.onAuthStateChange(
   (evento, sessao) => {
     if (sessao?.user) {
+      if (veioDeRetornoOAuth || evento === 'SIGNED_IN') {
+        sessionStorage.removeItem('convidado');
+        if (veioDeRetornoOAuth) {
+          window.location.replace('app.html');
+          return;
+        }
+      }
       mostrarContaSalva(sessao.user);
     } else {
       esconderContaSalva();
