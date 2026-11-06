@@ -453,7 +453,7 @@ const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBh
     const linguagem = String(corpo.linguagem || 'javascript');
     const problemas = [];
 
-    if (/while\s*\([^)]+\)\s*\{(?![\s\S]*(\+\+|--|+=|-=|break|return))/i.test(codigo)) {
+    if (/while\s*\([^)]+\)\s*\{(?![\s\S]*(\+\+|--|\+=|-=|break|return))/i.test(codigo)) {
       problemas.push('- **Possível Loop Infinito**: O laço `while` não parece atualizar a variável de controle nem possui condição de saída (`break`/`return`).');
     }
     if (/[^=!]==[^=]/g.test(codigo)) {
